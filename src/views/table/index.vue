@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 import { getList } from '@/api/table'
 
 export default {
@@ -76,4 +76,4 @@ export default {
     }
   }
 }
-</script>
+</script> -->
