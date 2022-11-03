@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+
 // 登录接口
 export function login(data) {
   return request({
@@ -10,7 +11,7 @@ export function login(data) {
 // 获取用户信息
 export function getInfo(token) {
   return request({
-    url: '/user',
+    url: '/user/abc',
     method: 'get',
     params: { token }
   })
@@ -19,7 +20,19 @@ export function getInfo(token) {
 // 退出登录
 export function logout() {
   return request({
-    url: '/user',
+    url: '/user/abc',
     method: 'post'
+  })
+}
+
+/**
+ *获取用户信息
+ * @returns data
+ */
+export function getUser(params) {
+  return request({
+    url: '/user',
+    method: 'get',
+    params
   })
 }
