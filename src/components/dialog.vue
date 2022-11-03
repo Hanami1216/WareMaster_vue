@@ -8,9 +8,10 @@
     :close-on-click-modal="false"
     v-on="on"
   >
-    <!-- 给弹窗中加入的主体内容都会出现在这里 -->
+
     <!-- 加上v-if 防止在弹窗中嵌套一些其他组件时，那些组件的生命周期只会执行一次的问题出现 -->
     <slot v-if="visibleSlot" />
+    <!-- 给弹窗中加入的主体内容都会出现在这里 -->
     <div slot="footer">
       <el-button plain @click="cancel">{{ btnTxt[0] }}</el-button>
       <el-button v-if="btnTxt[1]" type="primary" @click="confirm">{{ btnTxt[1] }}</el-button>
@@ -59,6 +60,7 @@ export default {
       this.ok = ok
       this.visible = true
       this.visibleSlot = true
+
       //   nextTick是将回调函数延迟在下一次DOM更新数据后调用，简单的理解就是当数据更新了，在DOM中渲染后，自动执行该函数。
       return this.$nextTick()
     },

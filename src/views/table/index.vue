@@ -14,7 +14,11 @@
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button type="text" size="small" @click="open">编辑</el-button>
+
+          <Dialog ref="dialog" :config="config" :before-close="beforeClose" @close="resetForm">
+            <span ref="span">{{ scope.row }}</span>
+          </Dialog>
         </template>
       </el-table-column>
     </el-table>
