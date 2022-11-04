@@ -164,7 +164,10 @@ export default {
     addUser() {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
-          addUser(this.userFormData)
+          addUser(this.userFormData).then(response => {
+            this.$refs.user.cancel()
+            this.fetchData()
+          })
         } else {
           console.log('error submit!!')
           return false
