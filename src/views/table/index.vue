@@ -27,24 +27,24 @@
 
     <!-- 操作弹窗 -->
     <Dialog ref="user" v-bind="user" :config="config" :before-close="beforeClose" @close="resetForm">
-      <el-form ref="userForm" :model="userForm" :rules="userRules" label-width="100px">
+      <el-form ref="userForm" :model="userFormData" :rules="userRules" label-width="100px">
         <el-form-item label="姓名" prop="user_name">
-          <el-input v-model="userForm.user_name" />
+          <el-input v-model="userFormData.user_name" />
         </el-form-item>
         <el-form-item label="性别" prop="user_sex">
-          <el-input v-model="userForm.user_sex" />
+          <el-input v-model="userFormData.user_sex" />
         </el-form-item>
         <el-form-item label="年龄" prop="user_age">
-          <el-input v-model="userForm.user_age" />
+          <el-input v-model="userFormData.user_age" />
         </el-form-item>
         <el-form-item label="电话" prop="user_tel">
-          <el-input v-model="userForm.user_tel" />
+          <el-input v-model="userFormData.user_tel" />
         </el-form-item>
         <el-form-item label="薪水" prop="user_salary">
-          <el-input v-model="userForm.user_salary" />
+          <el-input v-model="userFormData.user_salary" />
         </el-form-item>
         <el-form-item label="密码" prop="user_password">
-          <el-input v-model="userForm.user_password" />
+          <el-input v-model="userFormData.user_password" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="addUser">添加</el-button>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getUser } from '@/api/user'
+import { getUser, addUser } from '@/api/user'
 import Dialog from '@/components/dialog.vue'
 export default {
   components: {
@@ -77,14 +77,14 @@ export default {
     return {
       // 所有用户对象
       user: [{
-        name: '',
         user_id: '',
         user_name: '',
         user_sex: '',
         user_age: '',
         user_tel: '',
         user_salary: '',
-        user_password: ''
+        user_password: '',
+        user_repository_id: ''
       }],
       // 信息加载开关
       listLoading: true,
@@ -96,19 +96,20 @@ export default {
         btnTxt: ['取消', '提交']
       },
       // 用户表单
-      userForm: {
+      userFormData: {
         user_id: '',
         user_name: 'yokiware',
         user_sex: '男',
         user_age: '19',
         user_tel: '18038992335',
         user_salary: '100000',
-        user_password: '123456'
+        user_password: '123456',
+        user_repository_id: '1'
       },
       userRules: {
         user_name: [
           { required: true, message: '请输入管理员名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
         user_sex: [
           { required: true, message: '请输入性别', trigger: 'blur' }
@@ -157,27 +158,13 @@ export default {
     beforeClose() {
       console.log('关闭前')
     },
-    // resetForm() {
-    //   // 这里可以写重置表单的实现
-    // },
-
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    addUser(userForm) {
+    addUser() {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
-          console.log(userForm)
+          addUser(this.userFormData)
         } else {
           console.log('error submit!!')
           return false

@@ -41,10 +41,10 @@ export function getUser(params) {
  *添加用户信息
  * @returns data
  */
-export function addUser(params) {
+export function addUser(data) {
   return request({
     url: '/user',
     method: 'post',
-    params
+    data
   })
 }
