@@ -14,7 +14,7 @@
       <el-table-column fixed prop="user_password" label="登录密码" width="150" />
       <!-- 操作 -->
       <el-table-column fixed="right" label="操作" width="150">
-        <template slot-scope="scope">
+        <template>
           <!-- 查看这行数据 -->
           <el-button type="text" size="small" @click="controller">查看</el-button>
           <!-- 修改 -->
@@ -98,10 +98,10 @@ export default {
       // 用户表单
       userFormData: {
         user_id: '',
-        user_name: 'yokiware',
+        user_name: '贪玩计算姬',
         user_sex: '男',
         user_age: '19',
-        user_tel: '18038992335',
+        user_tel: '180****2335',
         user_salary: '100000',
         user_password: '123456',
         user_repository_id: '1'
@@ -166,10 +166,11 @@ export default {
         if (valid) {
           addUser(this.userFormData).then(response => {
             this.$refs.user.cancel()
+            this.$message('添加成功')
             this.fetchData()
           })
         } else {
-          console.log('error submit!!')
+          this.$message('字段校验失败，请重新输入')
           return false
         }
       })
