@@ -28,8 +28,8 @@
     <!-- 操作弹窗 -->
     <Dialog ref="user" v-bind="user" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="userForm" :model="userForm" :rules="userRules" label-width="100px">
-        <el-form-item label="姓名" prop="user_id">
-          <el-input v-model="userForm.user_id" />
+        <el-form-item label="姓名" prop="user_name">
+          <el-input v-model="userForm.user_name" />
         </el-form-item>
         <el-form-item label="性别" prop="user_sex">
           <el-input v-model="userForm.user_sex" />
@@ -46,7 +46,11 @@
         <el-form-item label="密码" prop="user_password">
           <el-input v-model="userForm.user_password" />
         </el-form-item>
+        <el-form-item label="操作">
+          <el-button @click="addUser">添加</el-button>
+        </el-form-item>
       </el-form>
+
     </Dialog>
   </div>
 
@@ -94,16 +98,16 @@ export default {
       // 用户表单
       userForm: {
         user_id: '',
-        user_name: '',
-        user_sex: '',
-        user_age: '',
-        user_tel: '',
-        user_salary: '',
-        user_password: ''
+        user_name: 'yokiware',
+        user_sex: '男',
+        user_age: '19',
+        user_tel: '18038992335',
+        user_salary: '100000',
+        user_password: '123456'
       },
       userRules: {
-        user_id: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
+        user_name: [
+          { required: true, message: '请输入管理员名称', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         user_sex: [
@@ -169,8 +173,17 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+    addUser(userForm) {
+      this.$refs.userForm.validate((valid) => {
+        if (valid) {
+          console.log(userForm)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
-
     // 结尾
   }
 }

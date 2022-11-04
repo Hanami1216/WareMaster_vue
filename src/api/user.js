@@ -36,3 +36,15 @@ export function getUser(params) {
     params
   })
 }
+
+/**
+ *添加用户信息
+ * @returns data
+ */
+export function addUser(params) {
+  return request({
+    url: '/user',
+    method: 'post',
+    params
+  })
+}

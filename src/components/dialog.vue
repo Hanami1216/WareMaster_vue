@@ -77,8 +77,11 @@ export default {
     },
     getDialogEvents() {
       // closed: () => this.visibleSlot = false是为了防止弹窗中的内容先于弹窗消失而造成弹窗在关闭时有一个突然向上缩小的情况
-      // eslint-disable-next-line no-return-assign
-      const { close } = this.config || {}; const events = { closed: () => this.visibleSlot = false }
+      const { close } = this.config || {}
+      const events = {
+        // eslint-disable-next-line no-return-assign
+        closed: () => this.visibleSlot = false
+      }
 
       if (close && typeof close === 'function') {
         Object.assign(events, {
