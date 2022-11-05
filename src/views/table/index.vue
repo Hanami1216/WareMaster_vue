@@ -16,10 +16,8 @@
       <el-table-column fixed="left" label="操作" width="150">
         // eslint-disable-next-line vue/no-unused-vars
         <template slot-scope="scope">
-          <!-- 查看这行数据 -->
-          <el-button type="text" size="small" @click="userDataRef(scope.row)">查看</el-button>
           <!-- 修改 -->
-          <el-button type="text" size="small" @click="controller">编辑</el-button>
+          <el-button type="text" size="small" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
           <el-button type="text" size="small" @click="controller">删除</el-button>
         </template>
@@ -149,7 +147,8 @@ export default {
       })
     },
     // 启动弹窗
-    controller() {
+    controller(userForm) {
+      this.userDataRef(userForm)
       this.$refs.user.open(
         cancel => {
         // cancel();
@@ -177,9 +176,6 @@ export default {
           return false
         }
       })
-    },
-    test(a) {
-      this.$message(a)
     },
     userDataRef(userForm) {
       this.userFormData = userForm
