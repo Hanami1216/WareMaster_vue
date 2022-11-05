@@ -54,17 +54,17 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '主页', icon: 'dashboard' }
     }]
   },
 
   {
     // 用户
-    path: '/example',
+    path: '/list',
     component: Layout,
-    redirect: '/example/table',
+    redirect: '/list/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    meta: { title: '操作', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'table',
