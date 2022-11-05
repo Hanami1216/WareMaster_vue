@@ -12,6 +12,9 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+// 导入粒子背景包
+import VueParticles from 'vue-particles'
+
 import '@/icons' // icon
 import '@/permission' // permission control
 /**
@@ -27,12 +30,18 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+// vue导入粒子背景
+Vue.use(VueParticles)
+
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+
+
 
 new Vue({
   el: '#app',

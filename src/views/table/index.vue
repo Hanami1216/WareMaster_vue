@@ -5,7 +5,7 @@
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="user" border style="width: 100%">
 
-      <el-table-column fixed prop="user_id" label="ID" width="150" />
+      <el-table-column fixed type="index" label="ID" width="150" />
       <el-table-column fixed prop="user_name" label="姓名" width="150" />
       <el-table-column fixed prop="user_sex" label="性别" width="150" />
       <el-table-column fixed prop="user_age" label="年龄" width="150" />

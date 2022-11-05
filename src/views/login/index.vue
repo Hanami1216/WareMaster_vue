@@ -1,9 +1,26 @@
 <template>
   <div class="login-container">
+    <vue-particles
+      color="#409EFF"
+      :particle-opacity="0.7"
+      :particles-number="60"
+      shape-type="circle"
+      :particle-size="6"
+      lines-color="#409EFF"
+      :lines-width="1"
+      :line-linked="true"
+      :line-opacity="0.4"
+      :lines-distance="150"
+      :move-speed="3"
+      :hover-effect="true"
+      hover-mode="grab"
+      :click-effect="true"
+      click-mode="push"
+    />
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">仓库管理系统</h3>
       </div>
       <!-- 用户名 -->
       <el-form-item prop="username">
@@ -49,6 +66,7 @@
       </div>
 
     </el-form>
+
   </div>
 </template>
 
@@ -171,12 +189,25 @@ $light_gray:#eee;
   overflow: hidden;
 
   .login-form {
-    position: relative;
+
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    height: 50%;
+    // 设置表单为居中
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
     overflow: hidden;
+    // position: relative;
+    // width: 520px;
+    // max-width: 100%;
+    // padding: 160px 35px 0;
+    // margin: 0 auto;
+    // overflow: hidden;
   }
 
   .tips {
