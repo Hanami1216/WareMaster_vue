@@ -13,10 +13,11 @@
       <el-table-column fixed prop="user_salary" label="薪水" width="150" />
       <el-table-column fixed prop="user_password" label="登录密码" width="150" />
       <!-- 操作 -->
-      <el-table-column fixed="right" label="操作" width="150">
-        <template>
+      <el-table-column fixed="left" label="操作" width="150">
+        // eslint-disable-next-line vue/no-unused-vars
+        <template slot-scope="scope">
           <!-- 查看这行数据 -->
-          <el-button type="text" size="small" @click="controller">查看</el-button>
+          <el-button type="text" size="small" @click="userDataRef(scope.row)">查看</el-button>
           <!-- 修改 -->
           <el-button type="text" size="small" @click="controller">编辑</el-button>
           <!-- 删除 -->
@@ -59,6 +60,7 @@
 <script>
 import { getUser, addUser } from '@/api/user'
 import Dialog from '@/components/dialog.vue'
+
 export default {
   components: {
     Dialog
@@ -106,6 +108,7 @@ export default {
         user_password: '123456',
         user_repository_id: '1'
       },
+      // 表单规则
       userRules: {
         user_name: [
           { required: true, message: '请输入管理员名称', trigger: 'blur' },
@@ -174,6 +177,12 @@ export default {
           return false
         }
       })
+    },
+    test(a) {
+      this.$message(a)
+    },
+    userDataRef(userForm) {
+      this.userFormData = userForm
     }
     // 结尾
   }
