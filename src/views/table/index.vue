@@ -1,7 +1,7 @@
 
 <template>
   <div class="user-main">
-    <el-button @click="controller">添加</el-button>
+    <el-button @click="controller(userFormData)">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="user" border style="width: 100%">
 
@@ -19,7 +19,7 @@
           <!-- 修改 -->
           <el-button type="text" size="small" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button type="text" size="small" @click="controller">删除</el-button>
+          <el-button type="text" size="small" @click="deleteUser(scope.row.user_id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -47,6 +47,7 @@
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="addUser">添加</el-button>
+          <el-button @click="modifyUser">修改</el-button>
         </el-form-item>
       </el-form>
 
@@ -56,7 +57,7 @@
 </template>
 
 <script>
-import { getUser, addUser } from '@/api/user'
+import { getUser, addUser, modifyUser, deleteUser } from '@/api/user'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -167,14 +168,44 @@ export default {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           addUser(this.userFormData).then(response => {
+            // 关闭弹窗
             this.$refs.user.cancel()
             this.$message('添加成功')
+            // 获取数据
             this.fetchData()
           })
         } else {
           this.$message('字段校验失败，请重新输入')
           return false
         }
+      })
+    },
+    modifyUser() {
+      this.$refs.userForm.validate((valid) => {
+        if (valid) {
+          modifyUser(this.userFormData).then(response => {
+            // 关闭弹窗
+            this.$refs.user.cancel()
+
+            if (response.data.result === 20031) {
+              this.$message.success('修改成功')
+            } else this.$message.error('修改失败')
+            // 获取数据
+            this.fetchData()
+          })
+        } else {
+          this.$message.error('字段校验失败，请重新输入')
+          return false
+        }
+      })
+    },
+    deleteUser(id) {
+      deleteUser(id).then(response => {
+        if (response.data.result === 20021) {
+          this.$message.success('修改成功')
+        } else this.$message.error('修改失败')
+        // 获取数据
+        this.fetchData()
       })
     },
     userDataRef(userForm) {

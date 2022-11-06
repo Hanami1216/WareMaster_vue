@@ -48,3 +48,26 @@ export function addUser(data) {
     data
   })
 }
+
+/**
+ *修改用户信息
+ * @returns data
+ */
+export function modifyUser(data) {
+  return request({
+    url: '/user',
+    method: 'put',
+    data
+  })
+}
+/**
+ *删除用户信息
+ * @returns data
+ */
+export function deleteUser(id) {
+  return request({
+    url: '/user/' + id,
+    method: 'delete'
+  })
+}
+
