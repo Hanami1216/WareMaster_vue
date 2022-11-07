@@ -34,8 +34,8 @@
         <el-form-item label="供应商" prop="supplier">
           <el-input v-model="receiveFormData.supplier.supplier_name" />
         </el-form-item>
-        <el-form-item label="负责人" prop="receive.receive_name">
-          <el-input v-model="receiveFormData.receive.receive_name" />
+        <el-form-item label="负责人" prop="user.user_name">
+          <el-input v-model="receiveFormData.user.user_name" />
         </el-form-item>
         <el-form-item label="零件类型" prop="goods.goods_id">
           <el-input v-model="receiveFormData.goods.goods_id" />
@@ -77,7 +77,7 @@ export default {
         record_num: '',
         record_time: '',
         supplier: {},
-        receive: {},
+        user: {},
         goods: {}
       }],
       // 信息加载开关
@@ -95,7 +95,7 @@ export default {
         record_num: '99',
         record_time: '999',
         supplier: {},
-        receive: {},
+        user: {},
         goods: {}
       },
       // 表单规则
