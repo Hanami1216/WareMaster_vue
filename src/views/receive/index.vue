@@ -17,7 +17,7 @@
           <!-- 修改 -->
           <el-button type="text" size="small" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button type="text" size="small" @click="deleteReceive(scope.row.receive_id)">删除</el-button>
+          <el-button type="text" size="small" @click="deleteReceive(scope.row.record_id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,7 +34,7 @@
         <el-form-item label="供应商" prop="supplier">
           <el-input v-model="receiveFormData.supplier.supplier_name" />
         </el-form-item>
-        <el-form-item label="负责人" prop="user.user_name">
+        <el-form-item label="负责人" prop="user_name">
           <el-input v-model="receiveFormData.user.user_name" />
         </el-form-item>
         <el-form-item label="零件类型" prop="goods.goods_id">
@@ -94,9 +94,17 @@ export default {
         record_id: '',
         record_num: '99',
         record_time: '999',
-        supplier: {},
-        user: {},
-        goods: {}
+        supplier: {
+          supplier_id: 0,
+          supplier_name: '贪玩计算姬'
+        },
+        user: {
+          user_id: 1,
+          user_name: '贪玩计算姬'
+        },
+        goods: {
+          goods_id: 1
+        }
       },
       // 表单规则
       receiveRules: {
@@ -147,7 +155,7 @@ export default {
             this.$refs.receive.cancel()
             if (response.data.result === 20011) {
               this.$message.success('添加成功')
-            } else this.$message.error('添加成功')
+            } else this.$message.error('添加失败')
 
             // 获取数据
             this.fetchData()
@@ -181,8 +189,8 @@ export default {
     deleteReceive(id) {
       deleteReceive(id).then(response => {
         if (response.data.result === 20021) {
-          this.$message.success('修改成功')
-        } else this.$message.error('修改失败')
+          this.$message.success('删除成功')
+        } else this.$message.error('删除失败')
         // 获取数据
         this.fetchData()
       })

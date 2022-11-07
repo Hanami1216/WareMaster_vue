@@ -20,7 +20,14 @@ export function addReceive(data) {
   return request({
     url: '/goods/receive',
     method: 'post',
-    data
+    data: {
+      record_id: data.record_id,
+      record_num: data.record_num,
+      record_time: data.record_time,
+      record_supplier_id: data.supplier.supplier_id,
+      record_goods_id: data.goods.goods_id,
+      record_person_id: data.user.user_id
+    }
   })
 }
 
@@ -32,7 +39,14 @@ export function modifyReceive(data) {
   return request({
     url: '/goods/receive',
     method: 'put',
-    data
+    data: {
+      record_id: data.record_id,
+      record_num: data.record_num,
+      record_time: data.record_time,
+      record_supplier_id: data.supplier.supplier_id,
+      record_goods_id: data.goods.goods_id,
+      record_person_id: data.user.user_id
+    }
   })
 }
 /**
