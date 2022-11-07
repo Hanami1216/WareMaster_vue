@@ -80,6 +80,22 @@ export const constantRoutes = [
       // }
     ]
   },
+  {
+    // 用户
+    path: '/list',
+    component: Layout,
+    redirect: '/list/receive',
+    name: 'Example',
+    meta: { title: '操作', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'receive',
+        name: 'Receive',
+        component: () => import('@/views/receive/index'),
+        meta: { title: '出货单', icon: 'table' }
+      }
+    ]
+  },
 
   {
     path: '/form',
