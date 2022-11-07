@@ -170,7 +170,10 @@ export default {
           addUser(this.userFormData).then(response => {
             // 关闭弹窗
             this.$refs.user.cancel()
-            this.$message('添加成功')
+            if (response.data.result === 20011) {
+              this.$message.success('添加成功')
+            } else this.$message.error('添加成功')
+
             // 获取数据
             this.fetchData()
           })
