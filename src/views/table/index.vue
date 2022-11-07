@@ -199,6 +199,7 @@ export default {
         }
       })
     },
+    // 发送删除请求
     deleteUser(id) {
       deleteUser(id).then(response => {
         if (response.data.result === 20021) {
