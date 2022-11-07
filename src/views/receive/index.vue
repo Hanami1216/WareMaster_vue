@@ -25,24 +25,24 @@
     <!-- 操作弹窗 -->
     <Dialog ref="receive" v-bind="receive" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
-        <el-form-item label="数量" prop="receiveFormData.record_num">
+        <el-form-item label="数量" prop="record_num">
           <el-input v-model="receiveFormData.record_num" />
         </el-form-item>
-        <el-form-item label="时间" prop="receiveFormData.record_time">
+        <el-form-item label="时间" prop="record_time">
           <el-input v-model="receiveFormData.record_time" />
         </el-form-item>
-        <el-form-item label="供应商" prop="receiveFormData.supplier">
+        <el-form-item label="供应商" prop="supplier">
           <el-input v-model="receiveFormData.supplier.supplier_name" />
         </el-form-item>
-        <el-form-item label="负责人" prop="receiveFormData.receive.receive_name">
+        <el-form-item label="负责人" prop="receive.receive_name">
           <el-input v-model="receiveFormData.receive.receive_name" />
         </el-form-item>
-        <el-form-item label="零件类型" prop="receiveFormData.goods.goods_id">
+        <el-form-item label="零件类型" prop="goods.goods_id">
           <el-input v-model="receiveFormData.goods.goods_id" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="addReceive">添加</el-button>
-          <el-button @click="modifyreceive">修改</el-button>
+          <el-button @click="modifyReceive">修改</el-button>
         </el-form-item>
       </el-form>
 
@@ -92,8 +92,8 @@ export default {
       // 收货表单
       receiveFormData: {
         record_id: '',
-        record_num: '',
-        record_time: '',
+        record_num: '99',
+        record_time: '999',
         supplier: {},
         receive: {},
         goods: {}
@@ -158,7 +158,7 @@ export default {
         }
       })
     },
-    modifyreceive() {
+    modifyReceive() {
       this.$refs.receiveForm.validate((valid) => {
         if (valid) {
           modifyReceive(this.receiveFormData).then(response => {
@@ -178,7 +178,7 @@ export default {
       })
     },
     // 发送删除请求
-    deletereceive(id) {
+    deleteReceive(id) {
       deleteReceive(id).then(response => {
         if (response.data.result === 20021) {
           this.$message.success('修改成功')
