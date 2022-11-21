@@ -10,7 +10,7 @@
       <el-table-column fixed prop="record_time" label="入货日期" width="150" />
       <el-table-column fixed prop="supplier.supplier_name" label="负责人" width="150" />
       <el-table-column fixed prop="user.user_name" label="负责人" width="150" />
-      <el-table-column fixed prop="goods.goods_id" label="零件" width="150" />
+      <el-table-column fixed prop="goods.goods_id" label="零件ID" width="150" />
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
         <template slot-scope="scope">
