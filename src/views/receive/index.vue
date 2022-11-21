@@ -93,13 +93,13 @@ export default {
       receiveFormData: {
         record_id: '',
         record_num: '99',
-        record_time: '999',
+        record_time: '',
         supplier: {
-          supplier_id: 0,
+          supplier_id: 1,
           supplier_name: '贪玩计算姬'
         },
         user: {
-          user_id: 1,
+          user_id: 2,
           user_name: '贪玩计算姬'
         },
         goods: {
