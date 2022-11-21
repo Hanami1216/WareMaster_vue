@@ -23,13 +23,19 @@
     </el-table>
 
     <!-- 操作弹窗 -->
-    <Dialog ref="receive" v-bind="receive" :config="config" :before-close="beforeClose" @close="resetForm">
+    <Dialog ref="receive" v-bind="recordList" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
         <el-form-item label="数量" prop="record_num">
           <el-input v-model="receiveFormData.record_num" />
         </el-form-item>
-        <el-form-item label="时间" prop="record_time">
-          <el-input v-model="receiveFormData.record_time" />
+        <el-form-item label="入货时间" prop="record_time">
+          <el-date-picker
+            v-model="receiveFormData.record_time"
+            type="datetime"
+            placeholder="选择日期时间"
+            default-time="12:00:00"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
         </el-form-item>
         <el-form-item label="供应商" prop="supplier">
           <el-input v-model="receiveFormData.supplier.supplier_name" />
@@ -114,6 +120,28 @@ export default {
         record_time: [
           { required: true, message: '请输入年龄', trigger: 'blur' }
         ]
+      },
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
       }
       // 尾
     }
@@ -197,6 +225,9 @@ export default {
     },
     receiveDataRef(receiveForm) {
       this.receiveFormData = receiveForm
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
     // 结尾
   }
