@@ -37,7 +37,7 @@
             value-format="yyyy-MM-dd HH:mm:ss"
           />
         </el-form-item>
-        <el-form-item label="供应商" prop="supplier">
+        <el-form-item label="供应商">
           <!-- v-model双向绑定数据 -->
           <el-select
 
@@ -51,12 +51,12 @@
               v-for="supplier in recordList.supplier"
               :key="supplier.supplier_id"
               :label="supplier.supplier_name"
-              :value="supplier.supplier_id"
+              :value="supplier"
             />
           </el-select>
 
         </el-form-item>
-        <el-form-item label="负责人" prop="user_name">
+        <el-form-item label="负责人">
           <el-select
 
             v-model="receiveFormData.user"
@@ -69,7 +69,7 @@
               v-for="user in recordList.user"
               :key="user.user_id"
               :label="user.user_name"
-              :value="user.user_id"
+              :value="user"
             />
           </el-select>
         </el-form-item>
