@@ -38,10 +38,40 @@
           />
         </el-form-item>
         <el-form-item label="供应商" prop="supplier">
-          <el-input v-model="receiveFormData.supplier.supplier_name" />
+          <!-- v-model双向绑定数据 -->
+          <el-select
+
+            v-model="receiveFormData.supplier"
+            size="big"
+            placeholder="请选择供应商"
+            style="width: 140px"
+            clearable
+          >
+            <el-option
+              v-for="supplier in recordList.supplier"
+              :key="supplier.supplier_id"
+              :label="supplier.supplier_name"
+              :value="supplier.supplier_id"
+            />
+          </el-select>
+
         </el-form-item>
         <el-form-item label="负责人" prop="user_name">
-          <el-input v-model="receiveFormData.user.user_name" />
+          <el-select
+
+            v-model="receiveFormData.user"
+            size="big"
+            placeholder="请选择负责人"
+            style="width: 140px"
+            clearable
+          >
+            <el-option
+              v-for="user in recordList.user"
+              :key="user.user_id"
+              :label="user.user_name"
+              :value="user.user_id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="零件类型" prop="goods.goods_id">
           <el-input v-model="receiveFormData.goods.goods_id" />
@@ -60,7 +90,7 @@
 <script>
 import { getReceive, addReceive, modifyReceive, deleteReceive } from '@/api/receive'
 import { getUser } from '@/api/user'
-import {getSupplier} from '@/api/supplier'
+import { getSupplier } from '@/api/supplier'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -88,6 +118,8 @@ export default {
         user: {},
         goods: {}
       }],
+      // 下拉框选择
+      selectedSupplierId: '',
       // 信息加载开关
       listLoading: true,
       config: {
@@ -160,13 +192,13 @@ export default {
       this.listLoading = true
       getReceive().then(response => {
         this.recordList = response.data.data
-        this.listLoading = false
       })
-      getUser().then(response =>{
+      getUser().then(response => {
         this.recordList.user = response.data.data
       })
-      getSupplier().then(response =>{
+      getSupplier().then(response => {
         this.recordList.supplier = response.data.data
+        this.listLoading = false
       })
     },
     // 启动弹窗
@@ -241,3 +273,13 @@ export default {
   }
 }
 </script>
+
+<style>
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+</style>
