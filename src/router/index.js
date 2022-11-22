@@ -76,6 +76,11 @@ export const constantRoutes = [
         path: 'receive',
         name: 'Receive',
         component: () => import('@/views/receive/index'),
+        meta: { title: '入货单', icon: 'table' }
+      }, {
+        path: 'deliver',
+        name: 'Deliver',
+        component: () => import('@/views/deliver/index.vue'),
         meta: { title: '出货单', icon: 'table' }
       }
       // {
