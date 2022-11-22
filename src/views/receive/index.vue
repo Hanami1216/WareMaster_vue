@@ -8,7 +8,7 @@
       <el-table-column fixed type="index" label="ID" width="150" />
       <el-table-column fixed prop="record_num" label="入货数量" width="150" />
       <el-table-column fixed prop="record_time" label="入货日期" width="150" />
-      <el-table-column fixed prop="supplier.supplier_name" label="负责人" width="150" />
+      <el-table-column fixed prop="supplier.supplier_name" label="供应商" width="150" />
       <el-table-column fixed prop="user.user_name" label="负责人" width="150" />
       <el-table-column fixed prop="goods.goods_id" label="零件ID" width="150" />
       <!-- 操作 -->
@@ -59,6 +59,8 @@
 
 <script>
 import { getReceive, addReceive, modifyReceive, deleteReceive } from '@/api/receive'
+import { getUser } from '@/api/user'
+import {getSupplier} from '@/api/supplier'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -159,6 +161,12 @@ export default {
       getReceive().then(response => {
         this.recordList = response.data.data
         this.listLoading = false
+      })
+      getUser().then(response =>{
+        this.recordList.user = response.data.data
+      })
+      getSupplier().then(response =>{
+        this.recordList.supplier = response.data.data
       })
     },
     // 启动弹窗
