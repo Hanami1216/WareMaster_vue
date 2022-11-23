@@ -41,7 +41,7 @@
           <!-- v-model双向绑定数据 -->
           <el-select
 
-            v-model="receiveFormData.supplier"
+            v-model="receiveFormData.supplier.supplier_id"
             size="big"
             placeholder="请选择供应商"
             style="width: 140px"
@@ -51,7 +51,7 @@
               v-for="supplier in recordList.supplier"
               :key="supplier.supplier_id"
               :label="supplier.supplier_name"
-              :value="supplier"
+              :value="supplier.supplier_id"
             />
           </el-select>
 
@@ -59,7 +59,7 @@
         <el-form-item label="负责人">
           <el-select
 
-            v-model="receiveFormData.user"
+            v-model="receiveFormData.user.user_id"
             size="big"
             placeholder="请选择负责人"
             style="width: 140px"
@@ -69,7 +69,7 @@
               v-for="user in recordList.user"
               :key="user.user_id"
               :label="user.user_name"
-              :value="user"
+              :value="user.user_id"
             />
           </el-select>
         </el-form-item>

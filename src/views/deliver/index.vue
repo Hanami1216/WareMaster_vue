@@ -23,7 +23,7 @@
     </el-table>
 
     <!-- 操作弹窗 -->
-    <Dialog ref="receive" v-bind="recordList" :config="config" :before-close="beforeClose" @close="resetForm">
+    <Dialog ref="receive" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
         <el-form-item label="数量">
           <el-input v-model="receiveFormData.record_number" />
@@ -131,7 +131,7 @@ export default {
       },
       // 出货表单
       receiveFormData: {
-        record_id: 1,
+        record_id: '',
         record_number: '99',
         record_time: '2022-11-01 10:56:04',
         consignee: {

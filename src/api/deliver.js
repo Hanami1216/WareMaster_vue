@@ -24,9 +24,9 @@ export function addOut(data) {
       record_id: data.record_id,
       record_number: data.record_number,
       record_time: data.record_time,
-      record_consignee_id: data.record_consignee_id,
-      record_goods_id: data.record_goods_id,
-      record_person_id: data.record_person_id
+      record_consignee_id: data.consignee.consignee_id,
+      record_goods_id: data.goods.goods_id,
+      record_person_id: data.user.user_id
     }
   })
 }
@@ -43,9 +43,9 @@ export function modifyOut(data) {
       record_id: data.record_id,
       record_number: data.record_number,
       record_time: data.record_time,
-      record_consignee_id: data.record_consignee_id,
-      record_goods_id: data.record_goods_id,
-      record_person_id: data.record_person_id
+      record_consignee_id: data.consignee.consignee_id,
+      record_goods_id: data.goods.goods_id,
+      record_person_id: data.user.user_id
     }
   })
 }
