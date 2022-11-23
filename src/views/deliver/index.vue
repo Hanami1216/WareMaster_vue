@@ -25,10 +25,10 @@
     <!-- 操作弹窗 -->
     <Dialog ref="receive" v-bind="recordList" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
-        <el-form-item label="数量" prop="record_num">
-          <el-input v-model="receiveFormData.record_num" />
+        <el-form-item label="数量">
+          <el-input v-model="receiveFormData.record_number" />
         </el-form-item>
-        <el-form-item label="入货时间" prop="record_time">
+        <el-form-item label="入货时间">
           <el-date-picker
             v-model="receiveFormData.record_time"
             type="datetime"
@@ -37,29 +37,27 @@
             value-format="yyyy-MM-dd HH:mm:ss"
           />
         </el-form-item>
-        <el-form-item label="供应商">
+        <el-form-item label="客户">
           <!-- v-model双向绑定数据 -->
           <el-select
-
-            v-model="receiveFormData.supplier"
+            v-model="receiveFormData.consignee.consignee_id"
             size="big"
-            placeholder="请选择供应商"
+            placeholder="请选择客户"
             style="width: 140px"
             clearable
           >
             <el-option
-              v-for="supplier in recordList.supplier"
-              :key="supplier.supplier_id"
-              :label="supplier.supplier_name"
-              :value="supplier"
+              v-for="consignee in recordList.consignee"
+              :key="consignee.consignee_id"
+              :label="consignee.consignee_name"
+              :value="consignee.consignee_id"
             />
           </el-select>
 
         </el-form-item>
         <el-form-item label="负责人">
           <el-select
-
-            v-model="receiveFormData.user"
+            v-model="receiveFormData.user.user_id"
             size="big"
             placeholder="请选择负责人"
             style="width: 140px"
@@ -69,11 +67,11 @@
               v-for="user in recordList.user"
               :key="user.user_id"
               :label="user.user_name"
-              :value="user"
+              :value="user.user_id"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="零件类型" prop="goods.goods_id">
+        <el-form-item label="零件类型">
           <el-input v-model="receiveFormData.goods.goods_id" />
         </el-form-item>
         <el-form-item label="操作">
@@ -114,8 +112,10 @@ export default {
         record_id: '',
         record_number: '',
         record_time: '',
-        consignee: {},
-        user: {},
+        consignee: {
+        },
+        user: {
+        },
         goods: {}
       }],
       // 下拉框选择
@@ -129,11 +129,11 @@ export default {
         center: true,
         btnTxt: ['取消', '提交']
       },
-      // 收货表单
+      // 出货表单
       receiveFormData: {
-        record_id: '',
+        record_id: 1,
         record_number: '99',
-        record_time: '',
+        record_time: '2022-11-01 10:56:04',
         consignee: {
           consignee_id: 1,
           consignee_name: '贪玩计算姬'
@@ -197,9 +197,9 @@ export default {
         this.recordList.user = response.data.data
       })
       getConsignee().then(response => {
-        this.recordList.supplier = response.data.data
-        this.listLoading = false
+        this.recordList.consignee = response.data.data
       })
+      this.listLoading = false
     },
     // 启动弹窗
     controller(receiveForm) {

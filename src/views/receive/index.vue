@@ -25,10 +25,10 @@
     <!-- 操作弹窗 -->
     <Dialog ref="receive" v-bind="recordList" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
-        <el-form-item label="数量" prop="record_num">
+        <el-form-item label="数量">
           <el-input v-model="receiveFormData.record_num" />
         </el-form-item>
-        <el-form-item label="入货时间" prop="record_time">
+        <el-form-item label="入货时间">
           <el-date-picker
             v-model="receiveFormData.record_time"
             type="datetime"
@@ -73,7 +73,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="零件类型" prop="goods.goods_id">
+        <el-form-item label="零件类型">
           <el-input v-model="receiveFormData.goods.goods_id" />
         </el-form-item>
         <el-form-item label="操作">
