@@ -207,7 +207,7 @@ export default {
       deleteUser(id).then(response => {
         if (response.data.result === 20021) {
           this.$message.success('修改成功')
-        } else this.$message.error('修改失败')
+        } else this.$message.error(response.data.msg)
         // 获取数据
         this.fetchData()
       })

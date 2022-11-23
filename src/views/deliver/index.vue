@@ -1,13 +1,13 @@
 
 <template>
   <div class="receive-main">
-    <el-button @click="controller(receiveFormData)">添加</el-button>
+    <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="recordList" border style="width: 100%">
 
       <el-table-column fixed type="index" label="ID" width="150" />
-      <el-table-column fixed prop="record_number" label="入货数量" width="150" />
-      <el-table-column fixed prop="record_time" label="入货日期" width="150" />
+      <el-table-column fixed prop="record_number" label="出货数量" width="150" />
+      <el-table-column fixed prop="record_time" label="出货日期" width="150" />
       <el-table-column fixed prop="consignee.consignee_name" label="供应商" width="150" />
       <el-table-column fixed prop="user.user_name" label="负责人" width="150" />
       <el-table-column fixed prop="goods.goods_id" label="零件ID" width="150" />
@@ -28,7 +28,7 @@
         <el-form-item label="数量">
           <el-input v-model="receiveFormData.record_number" />
         </el-form-item>
-        <el-form-item label="入货时间">
+        <el-form-item label="出货时间">
           <el-date-picker
             v-model="receiveFormData.record_time"
             type="datetime"
@@ -61,7 +61,7 @@
             size="big"
             placeholder="请选择负责人"
             style="width: 140px"
-            clearable
+            clearable="false"
           >
             <el-option
               v-for="user in recordList.user"
@@ -132,14 +132,14 @@ export default {
       // 出货表单
       receiveFormData: {
         record_id: '',
-        record_number: '99',
+        record_number: 99,
         record_time: '2022-11-01 10:56:04',
         consignee: {
           consignee_id: 1,
           consignee_name: '贪玩计算姬'
         },
         user: {
-          user_id: 2,
+          user_id: '2',
           user_name: '贪玩计算姬'
         },
         goods: {
@@ -264,7 +264,9 @@ export default {
       })
     },
     receiveDataRef(receiveForm) {
-      this.receiveFormData = receiveForm
+      if (receiveForm != null) {
+        this.receiveFormData = receiveForm
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()

@@ -1,7 +1,7 @@
 
 <template>
   <div class="receive-main">
-    <el-button @click="controller(receiveFormData)">添加</el-button>
+    <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="recordList" border style="width: 100%">
 
@@ -23,7 +23,7 @@
     </el-table>
 
     <!-- 操作弹窗 -->
-    <Dialog ref="receive" v-bind="recordList" :config="config" :before-close="beforeClose" @close="resetForm">
+    <Dialog ref="receive" :config="config" :before-close="beforeClose" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
         <el-form-item label="数量">
           <el-input v-model="receiveFormData.record_num" />
@@ -264,7 +264,9 @@ export default {
       })
     },
     receiveDataRef(receiveForm) {
-      this.receiveFormData = receiveForm
+      if (receiveForm != null) {
+        this.receiveFormData = receiveForm
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
