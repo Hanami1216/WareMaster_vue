@@ -103,6 +103,17 @@ export const constantRoutes = [
         meta: { title: '仓库', icon: 'form' }
       }
     ]
+  }, {
+    path: '/goods',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/goods/index'),
+        meta: { title: '零件', icon: 'form' }
+      }
+    ]
   },
 
   // 404 page must be placed at the end !!!
