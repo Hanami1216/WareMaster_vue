@@ -20,7 +20,11 @@ export function addGoods(data) {
   return request({
     url: '/goods/basic/',
     method: 'post',
-    data
+    data: {
+
+      goods_num: data.data.goods_num,
+      goods_type_id: data.data.goodsType.type_id
+    }
   })
 }
 
