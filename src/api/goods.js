@@ -21,9 +21,9 @@ export function addGoods(data) {
     url: '/goods/basic/',
     method: 'post',
     data: {
-
-      goods_num: data.data.goods_num,
-      goods_type_id: data.data.goodsType.type_id
+      goods_id: data.goods_id,
+      goods_num: data.goods_num,
+      goods_type_id: data.goods_type_id
     }
   })
 }

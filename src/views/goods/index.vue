@@ -10,61 +10,28 @@
       <el-table-column fixed prop="goodsType.type_id" label="零件类型ID" />
       <el-table-column fixed prop="goods_num" label="零件数量" />
       <el-table-column fixed prop="goodsType.type_price" label="零件价格" />
-<!-- 
-      <el-table-column fixed label="仓库">
 
-        <el-select
-          v-model="goodsForm.repositoryList.repository_id"
-          size="big"
-          placeholder="请选择负责人"
-          style="width: 140px"
-          clearable
-        >
-          <el-option
-            v-for="repository in goodsList.repositoryList"
-            :key="repository.repository_id"
-            :label="repositoryList.repository_desc"
-            :value="repositoryList.repository_id"
-          />
-        </el-select>
-
-      </el-table-column> -->
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
-        // eslint-disable-next-line vue/no-unused-vars
         <template slot-scope="scope">
           <!-- 修改 -->
           <el-button type="text" size="small" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button type="text" size="small" @click="delete(scope.row.goods_id)">删除</el-button>
+          <el-button type="text" size="small" @click="deleteGoods(scope.row.goods_id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <!-- 操作弹窗 -->
-    <Dialog ref="goods" :config="config" :before-close="beforeClose" @close="resetForm">
-      <el-form ref="goodsForm" :model="goodsForm" :rules="goodsRules" label-width="100px">
-        <el-form-item label="零件简介">
-          <el-input v-model="goodsForm.goodsType.type_desc" :disabled="true" />
+    <Dialog ref="goods" v-bind="goodsList" :config="config" :before-close="beforeClose" @close="resetForm">
+      <el-form ref="goodsFrom" :model="goodsFormData" :rules="goodsRules" label-width="100px">
+        <el-form-item label="零件ID" prop="goods_id">
+          <el-input v-model="goodsFormData.goods_id" />
         </el-form-item>
-        <el-form-item label="零件类型ID">
-          <el-input v-model="goodsForm.goodsType" />
-          <el-select
-            v-model="goodsForm.goodsType"
-            size="big"
-            placeholder="请选择负责人"
-            style="width: 200px"
-          >
-            <el-option
-              v-for="goods in goodsList"
-              :key="goods.goodsType"
-              :label="goods.goodsType.type_desc"
-              :value="goods.goodsType"
-            />
-          </el-select>
+        <el-form-item label="零件类型" prop="goods_type_id">
+          <el-input v-model="goodsFormData.goods_type_id" />
         </el-form-item>
-        <el-form-item label="零件数目">
-          <el-input v-model="goodsForm.goods_num" />
+        <el-form-item label="零件数目" prop="goods_num">
+          <el-input v-model="goodsFormData.goods_num" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
@@ -135,32 +102,10 @@ export default {
         center: true,
         btnTxt: ['取消', '提交']
       },
-      goodsForm: {
+      goodsFormData: {
         goods_id: 1,
-        goods_num: 99997398,
-        goodsType: {
-          type_id: 1,
-          type_desc: '微星显卡 3060ti',
-          type_price: 3999
-        },
-        repositoryList: [
-          {
-            repository_id: 1,
-            repository_address: '广州市花都区学府1号',
-            repository_area: 999,
-            repository_level: 1,
-            repository_desc: '广州城市理工学院',
-            goods: null
-          },
-          {
-            repository_id: 2,
-            repository_address: '广州市花都区学府1号',
-            repository_area: 999,
-            repository_level: 1,
-            repository_desc: '广州城市理工学院',
-            goods: null
-          }
-        ]
+        goods_num: 1234,
+        goods_type_id: 1
       },
 
       // 用户表单
@@ -168,6 +113,12 @@ export default {
       goodsRules: {
         goods_num: [
           { required: true, message: '请输入数量', trigger: 'blur' }
+        ],
+        goods_type_id: [
+          { required: true, message: '请输入零件', trigger: 'blur' }
+        ],
+        goods_id: [
+          { required: true, message: '请输入ID', trigger: 'blur' }
         ]
       }
       // 尾
@@ -189,8 +140,8 @@ export default {
       })
     },
     // 启动弹窗
-    controller(goodsForm) {
-      this.GoodsDataRef(goodsForm)
+    controller(goodsFormData) {
+      this.GoodsDataRef(goodsFormData)
       this.$refs.goods.open(
         cancel => {
         // cancel();
@@ -206,9 +157,9 @@ export default {
       this.$refs[formName].resetFields()
     },
     add() {
-      this.$refs.goodsForm.validate((valid) => {
+      this.$refs.goodsFrom.validate((valid) => {
         if (valid) {
-          addGoods(this.goodsForm).then(response => {
+          addGoods(this.goodsFormData).then(response => {
             // 关闭弹窗
             this.$refs.goods.cancel()
             if (response.data.result === 20011) {
@@ -225,9 +176,9 @@ export default {
       })
     },
     modify() {
-      this.$refs.goodsForm.validate((valid) => {
+      this.$refs.goodsFrom.validate((valid) => {
         if (valid) {
-          modifyGoods(this.goodsForm).then(response => {
+          modifyGoods(this.goodsFormData).then(response => {
             // 关闭弹窗
             this.$refs.goods.cancel()
 
@@ -244,10 +195,10 @@ export default {
       })
     },
     // 发送删除请求
-    delete(id) {
+    deleteGoods(id) {
       deleteGoods(id).then(response => {
         if (response.data.result === 20021) {
-          this.$message.success('修改成功')
+          this.$message.success('删除成功')
         } else this.$message.error(response.data.msg)
         // 获取数据
         this.fetchData()
@@ -255,7 +206,7 @@ export default {
     },
     GoodsDataRef(goodsForm) {
       if (goodsForm != null) {
-        this.goodsForm = goodsForm
+        this.goodsFormData = goodsForm
       }
     }
     // 结尾
