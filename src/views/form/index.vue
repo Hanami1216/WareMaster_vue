@@ -1,85 +1,210 @@
+
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-        </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="repository-main">
+    <el-button @click="controller()">添加</el-button>
+    <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
+    <el-table v-loading="listLoading" :data="repositoryList" border style="width: 100%">
+
+      <el-table-column fixed type="index" label="ID" />
+      <el-table-column fixed prop="repository_address" label="仓库地址" />
+      <el-table-column fixed prop="repository_area" label="仓库面积" />
+      <el-table-column fixed prop="repository_level" label="仓库等级" />
+      <el-table-column fixed prop="repository_desc" label="仓库简介" />
+
+      <!-- 操作 -->
+      <el-table-column fixed="left" label="操作" width="150">
+        <template slot-scope="scope">
+          <!-- 修改 -->
+          <el-button type="text" size="small" @click="controller(scope.row)">编辑</el-button>
+          <!-- 删除 -->
+          <el-button type="text" size="small" @click="deleteRepository(scope.row.repository_id)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <Dialog ref="repository" v-bind="repositoryList" :config="config" :before-close="beforeClose" @close="resetForm">
+      <el-form ref="repositoryFrom" :model="repositoryFormData" :rules="repositoryRules" label-width="100px">
+        <el-form-item label="仓库地址" prop="repository_address">
+          <el-input v-model="repositoryFormData.repository_address" />
+        </el-form-item>
+        <el-form-item label="仓库面积" prop="repository_area">
+          <el-input v-model="repositoryFormData.repository_area" />
+        </el-form-item>
+        <el-form-item label="仓库等级" prop="repository_level">
+          <el-input v-model="repositoryFormData.repository_level" />
+        </el-form-item>
+        <el-form-item label="仓库简介" prop="repository_desc">
+          <el-input v-model="repositoryFormData.repository_desc" />
+        </el-form-item>
+        <el-form-item label="操作">
+          <el-button @click="add()">添加</el-button>
+          <el-button @click="modify()">修改</el-button>
+        </el-form-item>
+      </el-form>
+
+    </Dialog>
   </div>
+
 </template>
 
 <script>
+
+import { getRepository, addRepository, modifyRepository, deleteRepository } from '@/api/repository'
+import Dialog from '@/components/dialog.vue'
+
 export default {
-  data() {
-    return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+  components: {
+    Dialog
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger'
       }
+      return statusMap[status]
     }
   },
-  methods: {
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
+  data() {
+    return {
+      // 所有仓库
+      repositoryList: [{
+        repository_id: 1,
+        repository_address: '广州市花都区学府1号',
+        repository_area: 999,
+        repository_level: 1,
+        repository_desc: '广州城市理工学院',
+        goods: [{
+          goods_id: 1,
+          goods_num: 1234,
+          goods_type_id: 1,
+          goodsType: null,
+          repositoryList: null
+        }]
+      }],
+      // 信息加载开关
+      listLoading: true,
+      config: {
+        top: '10vh',
+        width: '500px',
+        title: '温馨提示',
+        center: true,
+        btnTxt: ['取消', '提交']
+      },
+      repositoryFormData: {
+        repository_id: 1,
+        repository_address: '广州市花都区学府1号',
+        repository_area: 999,
+        repository_level: 1,
+        repository_desc: '广州城市理工学院'
+      },
+
+      // 用户表单
+      // 表单规则
+      repositoryRules: {
+        repository_address: [
+          { required: true, message: '请输入地址', trigger: 'blur' }
+        ],
+        repository_area: [
+          { required: true, message: '请输入面积', trigger: 'blur' }
+        ],
+        repository_level: [
+          { required: true, message: '请输入等级', trigger: 'blur' }
+        ],
+        repository_desc: [
+          { required: true, message: '请输入简介', trigger: 'blur' }
+        ]
+      }
+      // 尾
     }
+  },
+  created() {
+    // 执行获取数据函数
+    this.fetchData()
+  },
+  methods: {
+    handleClick(row) {
+      console.log(row)
+    },
+    fetchData() {
+      this.listLoading = true
+      getRepository().then(response => {
+        this.repositoryList = response.data.data
+        this.listLoading = false
+      })
+    },
+    // 启动弹窗
+    controller(repositoryFormData) {
+      this.RepositoryDataRef(repositoryFormData)
+      this.$refs.repository.open(
+        cancel => {
+        // cancel();
+          console.log('点击提交按钮了')
+        })
+        .then(() => { console.log(this.$refs.span) }
+        )
+    },
+    beforeClose() {
+      console.log('关闭前')
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    add() {
+      this.$refs.repositoryFrom.validate((valid) => {
+        if (valid) {
+          addRepository(this.repositoryFormData).then(response => {
+            // 关闭弹窗
+            this.$refs.repository.cancel()
+            if (response.data.result === 20011) {
+              this.$message.success('添加成功')
+            } else this.$message.error(response.data.msg)
+
+            // 获取数据
+            this.fetchData()
+          })
+        } else {
+          this.$message('字段校验失败，请重新输入')
+          return false
+        }
+      })
+    },
+    modify() {
+      this.$refs.repositoryFrom.validate((valid) => {
+        if (valid) {
+          modifyRepository(this.repositoryFormData).then(response => {
+            // 关闭弹窗
+            this.$refs.repository.cancel()
+
+            if (response.data.result === 20031) {
+              this.$message.success('修改成功')
+            } else this.$message.error('修改失败')
+            // 获取数据
+            this.fetchData()
+          })
+        } else {
+          this.$message.error('字段校验失败，请重新输入')
+          return false
+        }
+      })
+    },
+    // 发送删除请求
+    deleteRepository(id) {
+      deleteRepository(id).then(response => {
+        if (response.data.result === 20021) {
+          this.$message.success('删除成功')
+        } else this.$message.error(response.data.msg)
+        // 获取数据
+        this.fetchData()
+      })
+    },
+    RepositoryDataRef(repositoryForm) {
+      if (repositoryForm != null) {
+        this.repositoryFormData = repositoryForm
+      }
+    }
+    // 结尾
   }
 }
 </script>
-
-<style scoped>
-.line{
-  text-align: center;
-}
-</style>
-
