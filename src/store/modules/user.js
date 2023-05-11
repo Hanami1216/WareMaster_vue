@@ -35,7 +35,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ userName: username.trim(), userPassword: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
+        commit('SET_TOKEN', data.data)
         setToken(data.token)
         resolve()
       }).catch(error => {
