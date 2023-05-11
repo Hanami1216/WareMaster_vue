@@ -58,7 +58,13 @@
         </span>
       </el-form-item>
       <!-- 登录 -->
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click="toLogin">Login</el-button>
+      <el-button 
+      :loading="loading" 
+      type="primary" 
+      style="width:100%;
+      margin-bottom:30px;" 
+      @click.native.prevent="handleLogin"
+      >Login</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -77,15 +83,17 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
+      // 用户名校验
+      // if (!validUsername(value)) {
+      //   callback(new Error('Please enter the correct user name'))
+      // } else {
+      //   callback()
+      // }
+      callback()
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 4) {
+        callback(new Error('The password can not be less than 4 digits'))
       } else {
         callback()
       }
@@ -123,8 +131,22 @@ export default {
         this.$refs.password.focus()
       })
     },
-    toLogin() {
-      this.$router.push({ name: 'Dashboard' })
+
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
