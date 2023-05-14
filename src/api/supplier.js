@@ -35,6 +35,7 @@ export function modifySupplier(data) {
     data
   })
 }
+
 /**
  *删除供应商信息
  * @returns data
