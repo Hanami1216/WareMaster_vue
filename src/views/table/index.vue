@@ -142,7 +142,7 @@ export default {
     fetchData() {
       this.listLoading = true
       getUser().then(response => {
-        this.user = response.data.data
+        this.user = response.data
         this.listLoading = false
       })
     },

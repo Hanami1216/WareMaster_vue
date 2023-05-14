@@ -135,7 +135,7 @@ export default {
     fetchData() {
       this.listLoading = true
       getGoods().then(response => {
-        this.goodsList = response.data.data
+        this.goodsList = response.data
         this.listLoading = false
       })
     },

@@ -120,16 +120,18 @@ export default {
   },
   created() {
     // 执行获取数据函数
+
     this.fetchData()
   },
   methods: {
     handleClick(row) {
-      console.log(row)
+
     },
     fetchData() {
       this.listLoading = true
       getRepository().then(response => {
-        this.repositoryList = response.data.data
+        this.repositoryList = response.data
+
         this.listLoading = false
       })
     },
@@ -139,15 +141,15 @@ export default {
       this.$refs.repository.open(
         cancel => {
           // cancel();
-          console.log('点击提交按钮了')
+
         })
         .then(() => {
-            console.log(this.$refs.span)
-          }
+
+        }
         )
     },
     beforeClose() {
-      console.log('关闭前')
+
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()

@@ -188,13 +188,13 @@ export default {
     fetchData() {
       this.listLoading = true
       getOut().then(response => {
-        this.recordList = response.data.data
+        this.recordList = response.data
       })
       getUser().then(response => {
-        this.recordList.user = response.data.data
+        this.recordList.user = response.data
       })
       getConsignee().then(response => {
-        this.recordList.consignee = response.data.data
+        this.recordList.consignee = response.data
       })
       this.listLoading = false
     },

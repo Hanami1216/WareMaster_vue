@@ -190,13 +190,13 @@ export default {
     fetchData() {
       this.listLoading = true
       getReceive().then(response => {
-        this.recordList = response.data.data
+        this.recordList = response.data
       })
       getUser().then(response => {
-        this.recordList.user = response.data.data
+        this.recordList.user = response.data
       })
       getSupplier().then(response => {
-        this.recordList.supplier = response.data.data
+        this.recordList.supplier = response.data
         this.listLoading = false
       })
     },
