@@ -1,18 +1,18 @@
 <template>
   <el-dialog
+    :before-close="beClose"
+    :close-on-click-modal="false"
+    :visible="visible"
+    append-to-body
     class="el-dialog-cus"
     v-bind="attributes"
-    :visible="visible"
-    :before-close="beClose"
-    append-to-body
-    :close-on-click-modal="false"
     v-on="on"
   >
 
     <!-- 加上v-if 防止在弹窗中嵌套一些其他组件时，那些组件的生命周期只会执行一次的问题出现 -->
-    <slot v-if="visibleSlot" />
+    <slot v-if="visibleSlot"/>
     <!-- 给弹窗中加入的主体内容都会出现在这里 -->
-    <div slot="footer" />
+    <div slot="footer"/>
     <!-- 下方功能键在这里 -->
   </el-dialog>
 </template>
@@ -28,11 +28,18 @@ export default {
     },
     beforeClose: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
-    const { top = '20vh', width = '420px', title = '提示', center = false, btnTxt = ['取消', '确定'] } = this.config || {}
+    const {
+      top = '20vh',
+      width = '420px',
+      title = '提示',
+      center = false,
+      btnTxt = ['取消', '确定']
+    } = this.config || {}
     return {
       visible: false,
       attributes: {
@@ -95,33 +102,40 @@ export default {
 }
 </script>
 
-  <style lang="scss">
-  .el-dialog-cus {
-    .el-dialog {
-      padding: 8px;
-    }
-    .el-dialog__title {
-      font-weight: bold;
-    }
-    .el-dialog__header {
-      padding: 20px 0 12px;
-    }
-    .el-dialog__headerbtn {
-      top: 8px;
-      right: 8px;
-    }
-    .el-dialog__body {
-      padding: 0 24px;
-    }
-    .el-dialog__footer {
-      padding: 20px;
-      .el-button {
-        padding: 8px 20px;
-        & + .el-button {
-          margin-left: 40px;
-        }
+<style lang="scss">
+.el-dialog-cus {
+  .el-dialog {
+    padding: 8px;
+  }
+
+  .el-dialog__title {
+    font-weight: bold;
+  }
+
+  .el-dialog__header {
+    padding: 20px 0 12px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 8px;
+    right: 8px;
+  }
+
+  .el-dialog__body {
+    padding: 0 24px;
+  }
+
+  .el-dialog__footer {
+    padding: 20px;
+
+    .el-button {
+      padding: 8px 20px;
+
+      & + .el-button {
+        margin-left: 40px;
       }
     }
   }
-  </style>
+}
+</style>
 

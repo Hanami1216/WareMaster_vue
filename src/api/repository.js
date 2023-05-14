@@ -22,10 +22,10 @@ export function addRepository(data) {
     method: 'post',
     data: {
       repository_id: 1,
-      repository_address: "广州市花都区学府1号",
+      repository_address: '广州市花都区学府1号',
       repository_area: 999,
       repository_level: 1,
-      repository_desc: "广州城市理工学院",
+      repository_desc: '广州城市理工学院',
       goods: [
         {
           goods_id: 1,
@@ -50,6 +50,7 @@ export function modifyRepository(data) {
     data
   })
 }
+
 /**
  *删除仓库信息
  * @returns data

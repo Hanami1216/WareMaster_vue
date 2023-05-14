@@ -39,6 +39,7 @@ export function modifyGoods(data) {
     data
   })
 }
+
 /**
  *删除零件信息
  * @returns data

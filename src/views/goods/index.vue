@@ -1,37 +1,37 @@
-
 <template>
   <div class="goods-main">
     <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="goodsList" border style="width: 100%">
 
-      <el-table-column fixed type="index" label="ID" />
-      <el-table-column fixed prop="goodsType.type_desc" label="零件简介" />id
-      <el-table-column fixed prop="goodsType.type_id" label="零件类型ID" />
-      <el-table-column fixed prop="goods_num" label="零件数量" />
-      <el-table-column fixed prop="goodsType.type_price" label="零件价格" />
+      <el-table-column fixed label="ID" type="index"/>
+      <el-table-column fixed label="零件简介" prop="goodsType.type_desc"/>
+      id
+      <el-table-column fixed label="零件类型ID" prop="goodsType.type_id"/>
+      <el-table-column fixed label="零件数量" prop="goods_num"/>
+      <el-table-column fixed label="零件价格" prop="goodsType.type_price"/>
 
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
         <template slot-scope="scope">
           <!-- 修改 -->
-          <el-button type="text" size="small" @click="controller(scope.row)">编辑</el-button>
+          <el-button size="small" type="text" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button type="text" size="small" @click="deleteGoods(scope.row.goods_id)">删除</el-button>
+          <el-button size="small" type="text" @click="deleteGoods(scope.row.goods_id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <Dialog ref="goods" v-bind="goodsList" :config="config" :before-close="beforeClose" @close="resetForm">
+    <Dialog ref="goods" :before-close="beforeClose" :config="config" v-bind="goodsList" @close="resetForm">
       <el-form ref="goodsFrom" :model="goodsFormData" :rules="goodsRules" label-width="100px">
         <el-form-item label="零件ID" prop="goods_id">
-          <el-input v-model="goodsFormData.goods_id" />
+          <el-input v-model="goodsFormData.goods_id"/>
         </el-form-item>
         <el-form-item label="零件类型" prop="goods_type_id">
-          <el-input v-model="goodsFormData.goods_type_id" />
+          <el-input v-model="goodsFormData.goods_type_id"/>
         </el-form-item>
         <el-form-item label="零件数目" prop="goods_num">
-          <el-input v-model="goodsFormData.goods_num" />
+          <el-input v-model="goodsFormData.goods_num"/>
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
@@ -46,7 +46,7 @@
 
 <script>
 
-import { getGoods, addGoods, modifyGoods, deleteGoods } from '@/api/goods'
+import { addGoods, deleteGoods, getGoods, modifyGoods } from '@/api/goods'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -144,10 +144,12 @@ export default {
       this.GoodsDataRef(goodsFormData)
       this.$refs.goods.open(
         cancel => {
-        // cancel();
+          // cancel();
           console.log('点击提交按钮了')
         })
-        .then(() => { console.log(this.$refs.span) }
+        .then(() => {
+            console.log(this.$refs.span)
+          }
         )
     },
     beforeClose() {
@@ -164,7 +166,9 @@ export default {
             this.$refs.goods.cancel()
             if (response.data.result === 20011) {
               this.$message.success('添加成功')
-            } else this.$message.error(response.data.msg)
+            } else {
+              this.$message.error(response.data.msg)
+            }
 
             // 获取数据
             this.fetchData()
@@ -184,7 +188,9 @@ export default {
 
             if (response.data.result === 20031) {
               this.$message.success('修改成功')
-            } else this.$message.error('修改失败')
+            } else {
+              this.$message.error('修改失败')
+            }
             // 获取数据
             this.fetchData()
           })
@@ -199,7 +205,9 @@ export default {
       deleteGoods(id).then(response => {
         if (response.data.result === 20021) {
           this.$message.success('删除成功')
-        } else this.$message.error(response.data.msg)
+        } else {
+          this.$message.error(response.data.msg)
+        }
         // 获取数据
         this.fetchData()
       })
