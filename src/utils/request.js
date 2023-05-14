@@ -32,7 +32,8 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
-    return response
+    console.log(response.data)
+    return response.data
     // if the custom code is not 20000, it is judged as an error.
     // if (res.result !== 20011) {
     //   console.log('1999')
