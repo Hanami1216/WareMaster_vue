@@ -22,7 +22,7 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-
+  console.log(hasToken, 'fdsf')
   if (hasToken) {
     if (to.path === '/login') {
       // 如果已登录，则重定向到主页
@@ -35,8 +35,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           // 获取用户信息
-          await store.dispatch('user/getInfo')
-
+          // await store.dispatch('user/getInfo')
           next()
         } catch (error) {
           // 删除令牌并转到登录页面重新登录

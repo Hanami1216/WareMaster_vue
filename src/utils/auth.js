@@ -3,13 +3,19 @@ import Cookies from 'js-cookie'
 const TokenKey = 'token'
 
 export function getToken() {
-  return Cookies.get(TokenKey)
+  // 此处与TokenKey相同，此写法解决初始化时Cookies中不存在TokenKey报错
+  return Cookies.get(TokenKey) || sessionStorage.getItem(TokenKey)
 }
 
-export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+export function setToken(data) {
+  //   ? Cookies.set(TokenKey, dataString, {
+  //       expires: expires / 86400000
+  //     })
+  Cookies.set(TokenKey, data)
+  sessionStorage.setItem(TokenKey, data)
 }
 
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  Cookies.remove(TokenKey)
+  sessionStorage.removeItem(TokenKey)
 }

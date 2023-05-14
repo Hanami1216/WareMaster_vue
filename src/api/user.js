@@ -2,24 +2,26 @@ import request from '@/utils/request'
 
 // 登录接口
 export function login(data) {
+  console.log(data)
   return request({
     url: '/login/',
     method: 'post',
     data
   })
 }
+
 // 获取用户信息
-export function getInfo(token) {
+export function getInfo() {
   return request({
     url: '/user/',
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
+
 // 退出登录
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/login/logout',
     method: 'post'
   })
 }
@@ -59,6 +61,7 @@ export function modifyUser(data) {
     data
   })
 }
+
 /**
  *删除用户信息
  * @returns data

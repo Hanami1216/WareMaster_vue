@@ -1,23 +1,25 @@
 <template>
   <div class="login-container">
     <vue-particles
-      color="#409EFF"
-      :particle-opacity="0.7"
-      :particles-number="60"
-      shape-type="circle"
-      :particle-size="6"
-      lines-color="#409EFF"
-      :lines-width="1"
+      :click-effect="true"
+      :hover-effect="true"
       :line-linked="true"
       :line-opacity="0.4"
       :lines-distance="150"
+      :lines-width="1"
       :move-speed="3"
-      :hover-effect="true"
-      hover-mode="grab"
-      :click-effect="true"
+      :particle-opacity="0.7"
+      :particle-size="6"
+      :particles-number="60"
       click-mode="push"
+      color="#409EFF"
+      hover-mode="grab"
+      lines-color="#409EFF"
+      shape-type="circle"
     />
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" auto-complete="on" class="login-form"
+             label-position="left"
+    >
 
       <div class="title-container">
         <h3 class="title">仓库管理系统</h3>
@@ -25,46 +27,47 @@
       <!-- 用户名 -->
       <el-form-item prop="username">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="user"/>
         </span>
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
           auto-complete="on"
+          name="username"
+          placeholder="Username"
+          tabindex="1"
+          type="text"
         />
       </el-form-item>
       <!-- 密码 -->
       <el-form-item prop="password">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <svg-icon icon-class="password"/>
         </span>
         <el-input
           :key="passwordType"
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
           auto-complete="on"
+          name="password"
+          placeholder="Password"
+          tabindex="2"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
         </span>
       </el-form-item>
       <!-- 登录 -->
-      <el-button 
-      :loading="loading" 
-      type="primary" 
-      style="width:100%;
-      margin-bottom:30px;" 
-      @click.native.prevent="handleLogin"
-      >Login</el-button>
+      <el-button
+        :loading="loading"
+        style="width:100%;
+      margin-bottom:30px;"
+        type="primary"
+        @click.native.prevent="handleLogin"
+      >Login
+      </el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -77,7 +80,7 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+// import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
@@ -100,8 +103,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'root',
+        password: 'root'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -133,11 +136,12 @@ export default {
     },
 
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          await this.$store.dispatch('user/login', this.loginForm).then(async() => {
             this.$router.push({ path: this.redirect || '/' })
+            await this.$store.dispatch('user/getInfo')
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -146,6 +150,7 @@ export default {
           console.log('error submit!!')
           return false
         }
+
       })
     }
   }
@@ -156,8 +161,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -200,9 +205,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
