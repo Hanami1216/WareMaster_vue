@@ -11,10 +11,11 @@ export function login(data) {
 }
 
 // 获取用户信息
-export function getInfo() {
+export function getInfo(params) {
   return request({
-    url: '/user/',
-    method: 'get'
+    url: '/login/getUserInfo',
+    method: 'get',
+    params: { name: params }
   })
 }
 
