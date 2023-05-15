@@ -34,11 +34,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ userName: username.trim(), userPassword: password }).then(response => {
         const { data } = response
-        console.log(data, 'ssss')
         commit('SET_TOKEN', data)
         setToken(data)
-        console.log(getToken(), '11')
-        console.log(state.token, '22')
         resolve()
       }).catch(error => {
         reject(error)
@@ -50,16 +47,15 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
-        if (!data) {
+        console.log(response.data, '用户名')
+        if (!response.data) {
+          console.log('Verification failed, please Login again.')
           return reject('Verification failed, please Login again.')
         }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
+        commit('SET_NAME', response.data.data.user_name)
+        // 头像设置
+        // commit('SET_AVATAR', avatar)
+        resolve(response.data)
       }).catch(error => {
         reject(error)
       })
