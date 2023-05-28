@@ -11,7 +11,7 @@ import getPageTitle from '@/utils/get-page-title'
 */
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/', 'dashboard']
+const whiteList = ['/login', '/', '/register']
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -22,6 +22,7 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
+  console.log(to.path)
   console.log(hasToken, '路由守护')
   if (hasToken) {
     if (to.path === '/login') {
@@ -48,8 +49,8 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* 没有令牌*/
-
     if (whiteList.indexOf(to.path) !== -1) {
+      console.log('在免费登录白名单中，直接进入')
       // 在免费登录白名单中，直接进入
       next()
     } else {

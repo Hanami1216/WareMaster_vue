@@ -4,13 +4,13 @@
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="user" border style="width: 100%">
 
-      <el-table-column fixed label="ID" type="index" width="150"/>
-      <el-table-column fixed label="姓名" prop="user_name" width="150"/>
-      <el-table-column fixed label="性别" prop="user_sex" width="150"/>
-      <el-table-column fixed label="年龄" prop="user_age" width="150"/>
-      <el-table-column fixed label="电话" prop="user_tel" width="150"/>
-      <el-table-column fixed label="薪水" prop="user_salary" width="150"/>
-      <el-table-column fixed label="登录密码" prop="user_password" width="150"/>
+      <el-table-column fixed label="ID" type="index" width="150" />
+      <el-table-column fixed label="姓名" prop="user_name" width="150" />
+      <el-table-column fixed label="性别" prop="user_sex" width="150" />
+      <el-table-column fixed label="年龄" prop="user_age" width="150" />
+      <el-table-column fixed label="电话" prop="user_tel" width="150" />
+      <el-table-column fixed label="薪水" prop="user_salary" width="150" />
+      <el-table-column fixed label="登录密码" prop="user_password" width="150" />
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
         // eslint-disable-next-line vue/no-unused-vars
@@ -27,22 +27,22 @@
     <Dialog ref="user" :before-close="beforeClose" :config="config" v-bind="user" @close="resetForm">
       <el-form ref="userForm" :model="userFormData" :rules="userRules" label-width="100px">
         <el-form-item label="姓名" prop="user_name">
-          <el-input v-model="userFormData.user_name"/>
+          <el-input v-model="userFormData.user_name" />
         </el-form-item>
         <el-form-item label="性别" prop="user_sex">
-          <el-input v-model="userFormData.user_sex"/>
+          <el-input v-model="userFormData.user_sex" />
         </el-form-item>
         <el-form-item label="年龄" prop="user_age">
-          <el-input v-model="userFormData.user_age"/>
+          <el-input v-model="userFormData.user_age" />
         </el-form-item>
         <el-form-item label="电话" prop="user_tel">
-          <el-input v-model="userFormData.user_tel"/>
+          <el-input v-model="userFormData.user_tel" />
         </el-form-item>
         <el-form-item label="薪水" prop="user_salary">
-          <el-input v-model="userFormData.user_salary"/>
+          <el-input v-model="userFormData.user_salary" />
         </el-form-item>
         <el-form-item label="密码" prop="user_password">
-          <el-input v-model="userFormData.user_password"/>
+          <el-input v-model="userFormData.user_password" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="addUser">添加</el-button>
@@ -155,8 +155,8 @@ export default {
           console.log('点击提交按钮了')
         })
         .then(() => {
-            console.log(this.$refs.span)
-          }
+          console.log(this.$refs.span)
+        }
         )
     },
     beforeClose() {

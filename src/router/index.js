@@ -36,6 +36,12 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
+  {
+    // 登录
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  },
 
   {
     // 404
