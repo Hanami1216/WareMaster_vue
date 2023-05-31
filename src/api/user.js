@@ -43,9 +43,9 @@ export function getUser(params) {
  *添加用户信息
  * @returns data
  */
-export function addUser(data) {
+export function userRegister(data) {
   return request({
-    url: '/user',
+    url: '/login/register',
     method: 'post',
     data
   })

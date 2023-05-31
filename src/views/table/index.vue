@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { addUser, deleteUser, getUser, modifyUser } from '@/api/user'
+import { deleteUser, getUser, modifyUser, userRegister } from '@/api/user'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -168,7 +168,7 @@ export default {
     addUser() {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
-          addUser(this.userFormData).then(response => {
+          userRegister(this.userFormData).then(response => {
             // 关闭弹窗
             this.$refs.user.cancel()
             if (response.data.result === 20011) {

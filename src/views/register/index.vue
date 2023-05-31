@@ -9,18 +9,47 @@
             <el-input v-model="form.lastName" placeholder="名字" />
           </div>
         </el-form-item>
-        <el-form-item prop="email">
+        <el-form-item label="昵称" prop="nickname">
           <el-input v-model="form.nickname" placeholder="昵称" type="nickname" />
         </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="form.sex" placeholder="请选择性别">
+            <el-option label="男" value="男" />
+            <el-option label="女" value="女" />
+            <el-option label="未知" value="unknown" />
+          </el-select>
+          <el-tooltip
+            :content="`当前选择的是${form.sex==='男'?'男':form.sex==='女'?'女':'未知'}性别`"
+            class="item"
+            effect="dark"
+            placement="right-end"
+          ><i class="el-icon-info" />
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item label="用户类型" prop="sex">
+          <el-select v-model="form.user_type" placeholder="请选择用户类型">
+            <el-option label="超级管理员" value="0" />
+            <el-option label="管理员" value="1" />
+            <el-option label="员工" value="2" />
+            <el-option label="供应商" value="3" />
+            <el-option label="客户" value="4" />
+            <el-option label="未知" value="unknown" />
+          </el-select>
+        </el-form-item>
         <el-form-item prop="email">
-          <el-input v-model="form.email" placeholder="邮箱" type="email" />
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input v-model="form.password" placeholder="密码" type="password" />
-          <span style="font-size: smaller">使用 8 个或更多字符（字母、数字和符号的组合）</span>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-form-item prop="email">
+            <el-input v-model="form.email" placeholder="邮箱" type="email" />
+          </el-form-item>
+          <el-form-item prop="phone">
+            <el-input v-model="form.phone" placeholder="手机" type="phone" />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="form.password" placeholder="密码" type="password" />
+            <span style="font-size: smaller">使用 4 个或更多字符（字母、数字和符号的组合）</span>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="Register">提交</el-button>
+          </el-form-item>
         </el-form-item>
       </el-form>
       <img alt="右侧图片" class="form-image" src="./right-image.svg">
@@ -29,16 +58,23 @@
 </template>
 
 <script>
+
+import { userRegister } from '@/api/user'
+
 export default {
   data() {
     return {
       form: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        nickname: ''
+        firstName: '潘',
+        lastName: '豪',
+        email: '1151509140@qq.com',
+        password: 'root',
+        nickname: 'root',
+        phone: '18038992335',
+        sex: '男',
+        user_type: 0
       },
+
       rules: {
         firstName: [{ required: true, message: '请输入姓氏', trigger: 'blur' }],
         lastName: [{ required: true, message: '请输入名字', trigger: 'blur' }],
@@ -49,21 +85,48 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           {
-            min: 6,
+            min: 4,
             max: 20,
             message: '密码长度应在6-20位之间',
             trigger: 'blur'
           }
+        ],
+        phone: [
+          { required: true, message: '请输入正确的手机号码', trigger: 'blur' },
+          {
+            pattern: /^1[3456789]\d{9}$/,
+            message: '请输入正确的手机号码',
+            trigger: 'blur'
+          }
         ]
+
       }
     }
   },
   methods: {
-    submitForm() {
+    Register() {
       this.$refs.form.validate(valid => {
         if (valid) {
           // 表单验证通过，可以进行提交
           console.log('提交表单', this.form)
+          const user_name = `${this.form.firstName}${this.form.lastName}`
+          userRegister({
+            user_name: user_name, // 将 fullName 作为参数提交
+            email: this.form.email,
+            password: this.form.password,
+            nick_name: this.form.nickname,
+            phone: this.form.phone,
+            status: 0,
+            user_type: this.form.user_type,
+            sex: this.form.sex
+          }).then(response => {
+            if (response.code === 20011) {
+              this.$message.success('注册成功')
+              this.$router.push({ path: '/login' })
+            } else {
+              this.$message.error('注册失败')
+            }
+          })
         } else {
           // 如果表单验证不通过，需要进行提示
           this.$message.error('请输入正确的信息')
