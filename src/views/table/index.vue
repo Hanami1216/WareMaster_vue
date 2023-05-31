@@ -6,11 +6,34 @@
 
       <el-table-column fixed label="ID" type="index" width="150" />
       <el-table-column fixed label="姓名" prop="user_name" width="150" />
-      <el-table-column fixed label="性别" prop="user_sex" width="150" />
-      <el-table-column fixed label="年龄" prop="user_age" width="150" />
-      <el-table-column fixed label="电话" prop="user_tel" width="150" />
-      <el-table-column fixed label="薪水" prop="user_salary" width="150" />
-      <el-table-column fixed label="登录密码" prop="user_password" width="150" />
+      <el-table-column fixed label="昵称" prop="nick_name" width="150" />
+      <el-table-column fixed label="邮箱" prop="email" width="200" />
+      <el-table-column fixed label="电话" prop="phone" width="150" />
+      <el-table-column fixed label="性别" prop="sex" width="150" />
+      <el-table-column
+        fixed
+        label="用户类型"
+        width="150"
+      >
+        <template slot-scope="scope">
+          <span
+            v-show="scope.row.user_type === '0' "
+          >超级管理员</span>
+          <span
+            v-show="scope.row.user_type === '1' "
+          >管理员</span>
+          <span
+            v-show="scope.row.user_type === '2' "
+          >员工</span>
+          <span
+            v-show="scope.row.user_type === '3' "
+          >供应商</span>
+          <span
+            v-show="scope.row.user_type === '4' "
+          >客户</span>
+        </template>
+      </el-table-column>
+
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
         // eslint-disable-next-line vue/no-unused-vars
@@ -77,14 +100,15 @@ export default {
     return {
       // 所有用户对象
       user: [{
-        user_id: '',
-        user_name: '',
-        user_sex: '',
-        user_age: '',
-        user_tel: '',
-        user_salary: '',
-        user_password: '',
-        user_repository_id: ''
+        id: '1',
+        user_name: 'root',
+        nick_name: '贪玩の計算姬',
+        password: '$2a$10$estRqCrug679FKMi1y5OxuXiiJ43I2g2hqebIriEkyNsEcqznHj9u',
+        status: '0',
+        email: '1151509140',
+        phone: '18038992335',
+        sex: '男',
+        user_type: 0
       }],
       // 信息加载开关
       listLoading: true,
@@ -97,14 +121,15 @@ export default {
       },
       // 用户表单
       userFormData: {
-        user_id: '',
-        user_name: '贪玩计算姬',
-        user_sex: '男',
-        user_age: '19',
-        user_tel: '180****2335',
-        user_salary: '100000',
-        user_password: '123456',
-        user_repository_id: '1'
+        id: '1',
+        user_name: 'root',
+        nick_name: '贪玩の計算姬',
+        password: '$2a$10$estRqCrug679FKMi1y5OxuXiiJ43I2g2hqebIriEkyNsEcqznHj9u',
+        status: '0',
+        email: '1151509140',
+        phone: '18038992335',
+        sex: '男',
+        user_type: 0
       },
       // 表单规则
       userRules: {
