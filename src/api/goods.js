@@ -4,9 +4,9 @@ import request from '@/utils/request'
  *获取零件信息
  * @returns data
  */
-export function getGoods(params) {
+export function getAllGoods(params) {
   return request({
-    url: '/goods/basic/',
+    url: '/goods/info/all',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function getGoods(params) {
  */
 export function addGoods(data) {
   return request({
-    url: '/goods/basic/',
+    url: '/goods/info',
     method: 'post',
     data: {
       goods_id: data.goods_id,
@@ -34,7 +34,7 @@ export function addGoods(data) {
  */
 export function modifyGoods(data) {
   return request({
-    url: '/goods/basic/',
+    url: '/goods/info',
     method: 'put',
     data
   })
@@ -46,7 +46,7 @@ export function modifyGoods(data) {
  */
 export function deleteGoods(id) {
   return request({
-    url: '/goods/basic/' + id,
+    url: '/goods/info' + id,
     method: 'delete'
   })
 }

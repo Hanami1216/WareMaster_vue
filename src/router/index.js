@@ -98,13 +98,13 @@ export const constantRoutes = [
   },
 
   {
-    path: '/form',
+    path: '/warehouse',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
+        name: 'warehouse',
+        component: () => import('@/views/warehouse/index'),
         meta: { title: '仓库', icon: 'form' }
       }
     ]

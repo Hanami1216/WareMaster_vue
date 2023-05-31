@@ -6,7 +6,7 @@ import request from '@/utils/request'
  */
 export function getReceive(params) {
   return request({
-    url: '/goods/receive',
+    url: '/record/in/info/all',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function getReceive(params) {
  */
 export function addReceive(data) {
   return request({
-    url: '/goods/receive',
+    url: '/record/in',
     method: 'post',
     data: {
       record_id: data.record_id,
@@ -37,7 +37,7 @@ export function addReceive(data) {
  */
 export function modifyReceive(data) {
   return request({
-    url: '/goods/receive',
+    url: '/record/in',
     method: 'put',
     data: {
       record_id: data.record_id,
@@ -56,7 +56,7 @@ export function modifyReceive(data) {
  */
 export function deleteReceive(id) {
   return request({
-    url: '/goods/receive/' + id,
+    url: '/record/in/' + id,
     method: 'delete'
   })
 }

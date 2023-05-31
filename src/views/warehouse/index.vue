@@ -2,13 +2,13 @@
   <div class="repository-main">
     <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
-    <el-table v-loading="listLoading" :data="repositoryList" border style="width: 100%">
+    <el-table v-loading="listLoading" :data="warehouseList" border style="width: 100%">
 
-      <el-table-column fixed label="ID" type="index"/>
-      <el-table-column fixed label="仓库地址" prop="repository_address"/>
-      <el-table-column fixed label="仓库面积" prop="repository_area"/>
-      <el-table-column fixed label="仓库等级" prop="repository_level"/>
-      <el-table-column fixed label="仓库简介" prop="repository_desc"/>
+      <el-table-column fixed label="ID" type="index" />
+      <el-table-column fixed label="仓库地址" prop="warehouse_code" />
+      <el-table-column fixed label="仓库面积" prop="warehouse_name" />
+      <el-table-column fixed label="仓库等级" prop="address" />
+      <el-table-column fixed label="仓库简介" prop="contact" />
 
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
@@ -16,24 +16,24 @@
           <!-- 修改 -->
           <el-button size="small" type="text" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button size="small" type="text" @click="deleteRepository(scope.row.repository_id)">删除</el-button>
+          <el-button size="small" type="text" @click="deleteRepository(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <Dialog ref="repository" :before-close="beforeClose" :config="config" v-bind="repositoryList" @close="resetForm">
+    <Dialog ref="repository" :before-close="beforeClose" :config="config" v-bind="warehouseList" @close="resetForm">
       <el-form ref="repositoryFrom" :model="repositoryFormData" :rules="repositoryRules" label-width="100px">
-        <el-form-item label="仓库地址" prop="repository_address">
-          <el-input v-model="repositoryFormData.repository_address"/>
+        <el-form-item label="仓库地址" prop="warehouse_code">
+          <el-input v-model="repositoryFormData.warehouse_code" />
         </el-form-item>
-        <el-form-item label="仓库面积" prop="repository_area">
-          <el-input v-model="repositoryFormData.repository_area"/>
+        <el-form-item label="仓库面积" prop="warehouse_name">
+          <el-input v-model="repositoryFormData.warehouse_name" />
         </el-form-item>
-        <el-form-item label="仓库等级" prop="repository_level">
-          <el-input v-model="repositoryFormData.repository_level"/>
+        <el-form-item label="仓库等级" prop="address">
+          <el-input v-model="repositoryFormData.address" />
         </el-form-item>
-        <el-form-item label="仓库简介" prop="repository_desc">
-          <el-input v-model="repositoryFormData.repository_desc"/>
+        <el-form-item label="仓库简介" prop="contact">
+          <el-input v-model="repositoryFormData.contact" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
@@ -48,7 +48,7 @@
 
 <script>
 
-import { addRepository, deleteRepository, getRepository, modifyRepository } from '@/api/repository'
+import { addRepository, deleteRepository, getWareHouse, modifyRepository } from '@/api/warehouse'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -68,19 +68,12 @@ export default {
   data() {
     return {
       // 所有仓库
-      repositoryList: [{
-        repository_id: 1,
-        repository_address: '广州市花都区学府1号',
-        repository_area: 999,
-        repository_level: 1,
-        repository_desc: '广州城市理工学院',
-        goods: [{
-          goods_id: 1,
-          goods_num: 1234,
-          goods_type_id: 1,
-          goodsType: null,
-          repositoryList: null
-        }]
+      warehouseList: [{
+        id: 1,
+        warehouse_code: '001',
+        warehouse_name: 999,
+        address: 1,
+        contact: '广州城市理工学院'
       }],
       // 信息加载开关
       listLoading: true,
@@ -92,27 +85,27 @@ export default {
         btnTxt: ['取消', '提交']
       },
       repositoryFormData: {
-        repository_id: 1,
-        repository_address: '广州市花都区学府1号',
-        repository_area: 999,
-        repository_level: 1,
-        repository_desc: '广州城市理工学院'
+        id: 1,
+        warehouse_code: '001',
+        warehouse_name: 999,
+        address: '广州市花都区学府1号',
+        contact: '联系方式'
       },
 
       // 用户表单
       // 表单规则
       repositoryRules: {
-        repository_address: [
+        warehouse_code: [
+          { required: true, message: '请输入仓库编码', trigger: 'blur' }
+        ],
+        warehouse_name: [
+          { required: true, message: '请输入名称', trigger: 'blur' }
+        ],
+        address: [
           { required: true, message: '请输入地址', trigger: 'blur' }
         ],
-        repository_area: [
-          { required: true, message: '请输入面积', trigger: 'blur' }
-        ],
-        repository_level: [
-          { required: true, message: '请输入等级', trigger: 'blur' }
-        ],
-        repository_desc: [
-          { required: true, message: '请输入简介', trigger: 'blur' }
+        contact: [
+          { required: true, message: '请输入联系方式', trigger: 'blur' }
         ]
       }
       // 尾
@@ -129,8 +122,8 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      getRepository().then(response => {
-        this.repositoryList = response.data
+      getWareHouse().then(response => {
+        this.warehouseList = response.data
 
         this.listLoading = false
       })
@@ -145,7 +138,7 @@ export default {
         })
         .then(() => {
 
-          }
+        }
         )
     },
     beforeClose() {

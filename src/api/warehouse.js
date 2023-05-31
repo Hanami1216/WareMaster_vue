@@ -4,9 +4,9 @@ import request from '@/utils/request'
  *获取仓库信息
  * @returns data
  */
-export function getRepository(params) {
+export function getWareHouse(params) {
   return request({
-    url: '/repository/',
+    url: '/warehouse/info/all',
     method: 'get',
     params
   })
@@ -18,23 +18,10 @@ export function getRepository(params) {
  */
 export function addRepository(data) {
   return request({
-    url: '/repository/',
+    url: '/warehouse/info',
     method: 'post',
     data: {
-      repository_id: 1,
-      repository_address: '广州市花都区学府1号',
-      repository_area: 999,
-      repository_level: 1,
-      repository_desc: '广州城市理工学院',
-      goods: [
-        {
-          goods_id: 1,
-          goods_num: 1234,
-          goods_type_id: 1,
-          goodsType: null,
-          repositoryList: null
-        }
-      ]
+      warehouse: {}
     }
   })
 }
@@ -45,7 +32,7 @@ export function addRepository(data) {
  */
 export function modifyRepository(data) {
   return request({
-    url: '/repository/',
+    url: '/warehouse/info',
     method: 'put',
     data
   })
@@ -57,7 +44,7 @@ export function modifyRepository(data) {
  */
 export function deleteRepository(id) {
   return request({
-    url: '/repository/' + id,
+    url: '/warehouse/info' + id,
     method: 'delete'
   })
 }

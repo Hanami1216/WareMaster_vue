@@ -4,12 +4,12 @@
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="recordList" border style="width: 100%">
 
-      <el-table-column fixed label="ID" type="index" width="150"/>
-      <el-table-column fixed label="出货数量" prop="record_number" width="150"/>
-      <el-table-column fixed label="出货日期" prop="record_time" width="150"/>
-      <el-table-column fixed label="供应商" prop="consignee.consignee_name" width="150"/>
-      <el-table-column fixed label="负责人" prop="user.user_name" width="150"/>
-      <el-table-column fixed label="零件ID" prop="goods.goods_id" width="150"/>
+      <el-table-column fixed label="ID" type="index" width="150" />
+      <el-table-column fixed label="出货数量" prop="record_number" width="150" />
+      <el-table-column fixed label="出货日期" prop="record_time" width="150" />
+      <el-table-column fixed label="供应商" prop="consignee.consignee_name" width="150" />
+      <el-table-column fixed label="负责人" prop="user.user_name" width="150" />
+      <el-table-column fixed label="零件ID" prop="goods.id" width="150" />
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
         <template slot-scope="scope">
@@ -25,7 +25,7 @@
     <Dialog ref="receive" :before-close="beforeClose" :config="config" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
         <el-form-item label="数量">
-          <el-input v-model="receiveFormData.record_number"/>
+          <el-input v-model="receiveFormData.record_number" />
         </el-form-item>
         <el-form-item label="出货时间">
           <el-date-picker
@@ -71,7 +71,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="零件类型">
-          <el-input v-model="receiveFormData.goods.goods_id"/>
+          <el-input v-model="receiveFormData.goods.goods_id" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="addReceive">添加</el-button>
@@ -207,8 +207,8 @@ export default {
           console.log('点击提交按钮了')
         })
         .then(() => {
-            console.log(this.$refs.span)
-          }
+          console.log(this.$refs.span)
+        }
         )
     },
     beforeClose() {

@@ -4,12 +4,14 @@
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="recordList" border style="width: 100%">
 
-      <el-table-column fixed label="ID" type="index" width="150"/>
-      <el-table-column fixed label="入货数量" prop="record_num" width="150"/>
-      <el-table-column fixed label="入货日期" prop="record_time" width="150"/>
-      <el-table-column fixed label="供应商" prop="supplier.supplier_name" width="150"/>
-      <el-table-column fixed label="负责人" prop="user.user_name" width="150"/>
-      <el-table-column fixed label="零件ID" prop="goods.goods_id" width="150"/>
+      <el-table-column fixed label="ID" type="index" width="150" />
+      <el-table-column fixed label="入货数量" prop="out_order_number" width="150" />
+      <el-table-column fixed label="入货日期" prop="out_time" width="150" />
+      <el-table-column fixed label="供应商" prop="manufacturer.manufacturer_name" width="150" />
+      <el-table-column fixed label="业务操作员" prop="salesman.nick_name" width="150" />
+      <el-table-column fixed label="零件名称" prop="goodsType.name" width="150" />
+      <el-table-column fixed label="零件类型" prop="goodsType.type" width="150" />
+      <el-table-column fixed label="零件类型" prop="goodsType.price" width="150" />
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
         <template slot-scope="scope">
@@ -25,56 +27,56 @@
     <Dialog ref="receive" :before-close="beforeClose" :config="config" @close="resetForm">
       <el-form ref="receiveForm" :model="receiveFormData" :rules="receiveRules" label-width="100px">
         <el-form-item label="数量">
-          <el-input v-model="receiveFormData.record_num"/>
+          <el-input v-model="receiveFormData.record_num" />
         </el-form-item>
         <el-form-item label="入货时间">
           <el-date-picker
-            v-model="receiveFormData.record_time"
+            v-model="receiveFormData.out_time"
             default-time="12:00:00"
             placeholder="选择日期时间"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
           />
         </el-form-item>
-        <el-form-item label="供应商">
-          <!-- v-model双向绑定数据 -->
-          <el-select
+        <!--        <el-form-item label="供应商">-->
+        <!--          &lt;!&ndash; v-model双向绑定数据 &ndash;&gt;-->
+        <!--          <el-select-->
 
-            v-model="receiveFormData.supplier.supplier_id"
-            clearable
-            placeholder="请选择供应商"
-            size="big"
-            style="width: 140px"
-          >
-            <el-option
-              v-for="supplier in recordList.supplier"
-              :key="supplier.supplier_id"
-              :label="supplier.supplier_name"
-              :value="supplier.supplier_id"
-            />
-          </el-select>
+        <!--            v-model="receiveFormData.supplier.supplier_id"-->
+        <!--            clearable-->
+        <!--            placeholder="请选择供应商"-->
+        <!--            size="big"-->
+        <!--            style="width: 140px"-->
+        <!--          >-->
+        <!--            <el-option-->
+        <!--              v-for="supplier in recordList.supplier"-->
+        <!--              :key="supplier.supplier_id"-->
+        <!--              :label="supplier.supplier_name"-->
+        <!--              :value="supplier.supplier_id"-->
+        <!--            />-->
+        <!--          </el-select>-->
 
-        </el-form-item>
-        <el-form-item label="负责人">
-          <el-select
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="负责人">-->
+        <!--          <el-select-->
 
-            v-model="receiveFormData.user.user_id"
-            clearable
-            placeholder="请选择负责人"
-            size="big"
-            style="width: 140px"
-          >
-            <el-option
-              v-for="user in recordList.user"
-              :key="user.user_id"
-              :label="user.user_name"
-              :value="user.user_id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="零件类型">
-          <el-input v-model="receiveFormData.goods.goods_id"/>
-        </el-form-item>
+        <!--            v-model="receiveFormData.user.user_id"-->
+        <!--            clearable-->
+        <!--            placeholder="请选择负责人"-->
+        <!--            size="big"-->
+        <!--            style="width: 140px"-->
+        <!--          >-->
+        <!--            <el-option-->
+        <!--              v-for="user in recordList.user"-->
+        <!--              :key="user.user_id"-->
+        <!--              :label="user.user_name"-->
+        <!--              :value="user.user_id"-->
+        <!--            />-->
+        <!--          </el-select>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="零件类型">-->
+        <!--          <el-input v-model="receiveFormData.goods.goods_id" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="操作">
           <el-button @click="addReceive">添加</el-button>
           <el-button @click="modifyReceive">修改</el-button>
@@ -89,7 +91,7 @@
 <script>
 import { addReceive, deleteReceive, getReceive, modifyReceive } from '@/api/receive'
 import { getUser } from '@/api/user'
-import { getSupplier } from '@/api/supplier'
+// import { getSupplier } from '@/api/supplier'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -108,14 +110,30 @@ export default {
   },
   data() {
     return {
-      // 所有用户对象
       recordList: [{
-        record_id: '',
-        record_num: '',
-        record_time: '',
-        supplier: {},
-        user: {},
-        goods: {}
+        id: 1,
+        out_order_number: 'order-1',
+        quantity: 10,
+        out_time: '2023-05-31T09:50:05',
+        manufacturer_id: 2,
+        salesman_id: 1,
+        goodsType_id: 1,
+        remark: 'order-1 remark',
+        salesman: {
+          name: null,
+          nick_name: '贪玩の計算姬',
+          sex: '0',
+          age: null,
+          phone: '18038992335',
+          user_type: '0'
+        },
+        manufacturer: null,
+        goodsType: {
+          id: 1,
+          type: '显卡',
+          price: 3999,
+          name: '微星显卡 3060ti'
+        }
       }],
       // 下拉框选择
       selectedSupplierId: '',
@@ -130,27 +148,21 @@ export default {
       },
       // 收货表单
       receiveFormData: {
-        record_id: '',
-        record_num: '99',
-        record_time: '',
-        supplier: {
-          supplier_id: 1,
-          supplier_name: '贪玩计算姬'
-        },
-        user: {
-          user_id: 2,
-          user_name: '贪玩计算姬'
-        },
-        goods: {
-          goods_id: 1
-        }
+        id: 1,
+        out_order_number: 'order-1',
+        manufacturer_id: 2,
+        out_time: '',
+        item_id: 1,
+        quantity: 10,
+        remark: '备注',
+        salesman_id: 1
       },
       // 表单规则
       receiveRules: {
         record_num: [
           { required: true, message: '请输入', trigger: 'blur' }
         ],
-        record_time: [
+        out_time: [
           { required: true, message: '请输入年龄', trigger: 'blur' }
         ]
       },
@@ -195,10 +207,10 @@ export default {
       getUser().then(response => {
         this.recordList.user = response.data
       })
-      getSupplier().then(response => {
-        this.recordList.supplier = response.data
-        this.listLoading = false
-      })
+      // getSupplier().then(response => {
+      //   this.recordList.supplier = response.data
+      // })
+      this.listLoading = false
     },
     // 启动弹窗
     controller(receiveForm) {
@@ -209,8 +221,8 @@ export default {
           console.log('点击提交按钮了')
         })
         .then(() => {
-            console.log(this.$refs.span)
-          }
+
+        }
         )
     },
     beforeClose() {
