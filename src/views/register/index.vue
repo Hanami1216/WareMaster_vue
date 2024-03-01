@@ -12,14 +12,14 @@
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="form.nickname" placeholder="昵称" type="nickname" />
         </el-form-item>
-        <el-form-item label="性别" prop="sex">
+        <el-form-item label="性别">
           <el-select v-model="form.sex" placeholder="请选择性别">
-            <el-option label="男" value="男" />
-            <el-option label="女" value="女" />
-            <el-option label="未知" value="unknown" />
+            <el-option label="男" value="0" />
+            <el-option label="女" value="1" />
+            <el-option label="未知" value="2" />
           </el-select>
           <el-tooltip
-            :content="`当前选择的是${form.sex==='男'?'男':form.sex==='女'?'女':'未知'}性别`"
+            :content="`当前选择的是${form.sex=== 0?'男':form.sex===1?'女':'未知'}性别`"
             class="item"
             effect="dark"
             placement="right-end"
@@ -71,7 +71,7 @@ export default {
         password: 'root',
         nickname: 'root',
         phone: '18038992335',
-        sex: '男',
+        sex: 0,
         user_type: 0
       },
 
