@@ -3,12 +3,12 @@
     <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="materialList" border style="width: 100%">
-      <el-table-column fixed label="供应商名称" prop="supplier.supplier_name" />
-      <el-table-column fixed label="联系信息" prop="supplier.contact_info" />
-      <el-table-column fixed label="公司名称" prop="supplier.supplier_company" />
       <el-table-column fixed label="物料名称" prop="material.material_name" />
       <el-table-column fixed label="物料描述" prop="material.description" />
       <el-table-column fixed label="物料价格" prop="material.price" />
+      <el-table-column fixed label="供应商名称" prop="supplier.supplier_name" />
+      <el-table-column fixed label="联系信息" prop="supplier.contact_info" />
+      <el-table-column fixed label="公司名称" prop="supplier.supplier_company" />
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <!-- 修改 -->
