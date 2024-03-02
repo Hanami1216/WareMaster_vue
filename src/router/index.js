@@ -119,6 +119,17 @@ export const constantRoutes = [
         meta: { title: '零件', icon: 'form' }
       }
     ]
+  }, {
+    path: '/material',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'material',
+        component: () => import('@/views/material/index'),
+        meta: { title: '物料信息', icon: 'form' }
+      }
+    ]
   },
 
   // 404 page must be placed at the end !!!
