@@ -12,7 +12,7 @@
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="form.nickname" placeholder="昵称" type="nickname" />
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="sex">
           <el-select v-model="form.sex" placeholder="请选择性别">
             <el-option label="男" value="0" />
             <el-option label="女" value="1" />

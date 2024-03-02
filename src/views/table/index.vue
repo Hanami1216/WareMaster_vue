@@ -9,7 +9,16 @@
       <el-table-column fixed label="昵称" prop="nick_name" width="150" />
       <el-table-column fixed label="邮箱" prop="email" width="200" />
       <el-table-column fixed label="电话" prop="phone" width="150" />
-      <el-table-column fixed label="性别" prop="sex" width="150" />
+      <el-table-column fixed label="性别" prop="sex" width="150">
+        <template slot-scope="scope">
+          <span
+            v-show="scope.row.sex === 0 "
+          >男</span>
+          <span
+            v-show="scope.row.user_type === 1 "
+          >女</span>
+        </template>
+      </el-table-column>
       <el-table-column
         fixed
         label="用户类型"
@@ -17,19 +26,19 @@
       >
         <template slot-scope="scope">
           <span
-            v-show="scope.row.user_type === '0' "
+            v-show="scope.row.user_type === 0 "
           >超级管理员</span>
           <span
-            v-show="scope.row.user_type === '1' "
+            v-show="scope.row.user_type === 1 "
           >管理员</span>
           <span
-            v-show="scope.row.user_type === '2' "
+            v-show="scope.row.user_type === 2 "
           >员工</span>
           <span
-            v-show="scope.row.user_type === '3' "
+            v-show="scope.row.user_type === 3 "
           >供应商</span>
           <span
-            v-show="scope.row.user_type === '4' "
+            v-show="scope.row.user_type === 4 "
           >客户</span>
         </template>
       </el-table-column>
@@ -104,10 +113,10 @@ export default {
         user_name: 'root',
         nick_name: '贪玩の計算姬',
         password: '$2a$10$estRqCrug679FKMi1y5OxuXiiJ43I2g2hqebIriEkyNsEcqznHj9u',
-        status: '0',
+        status: 0,
         email: '1151509140',
         phone: '18038992335',
-        sex: '男',
+        sex: 1,
         user_type: 0
       }],
       // 信息加载开关
@@ -128,7 +137,7 @@ export default {
         status: '0',
         email: '1151509140',
         phone: '18038992335',
-        sex: '男',
+        sex: 1,
         user_type: 0
       },
       // 表单规则
