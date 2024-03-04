@@ -65,18 +65,12 @@ export const constantRoutes = [
 
   {
     // 用户
-    path: '/list',
+    path: '/control',
     component: Layout,
-    redirect: '/list/table',
-    name: 'Example',
+    redirect: '/control/receive',
+    name: 'Control',
     meta: { title: '操作', icon: 'el-icon-s-help' },
     children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '用户', icon: 'table' }
-      },
       {
         path: 'receive',
         name: 'Receive',
@@ -96,7 +90,27 @@ export const constantRoutes = [
       // }
     ]
   },
-
+  {
+    // 用户
+    path: '/list',
+    component: Layout,
+    redirect: '/list/table',
+    name: 'Example',
+    meta: { title: '用户', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/user/index'),
+        meta: { title: '系统用户管理', icon: 'table' }
+      }, {
+        path: 'supplier',
+        name: 'Supplier',
+        component: () => import('@/views/supplier/index'),
+        meta: { title: '供应商名册管理', icon: 'table' }
+      }
+    ]
+  },
   {
     path: '/warehouse',
     component: Layout,
