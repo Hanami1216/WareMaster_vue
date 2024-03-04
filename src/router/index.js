@@ -81,17 +81,20 @@ export const constantRoutes = [
         name: 'Deliver',
         component: () => import('@/views/deliver/index.vue'),
         meta: { title: '出货单', icon: 'table' }
+      }, {
+        path: 'SupplierInvoices',
+        name: 'supplierInvoices',
+        component: () => import('@/views/receive/index'),
+        meta: { title: '应付账单', icon: 'table' }
+      }, {
+        path: 'CustomerInvoices',
+        name: 'customer Invoices',
+        component: () => import('@/views/deliver/index.vue'),
+        meta: { title: '应收账单', icon: 'table' }
       }
-      // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: () => import('@/views/tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
-      // }
     ]
   },
   {
-    // 用户
     path: '/list',
     component: Layout,
     redirect: '/list/table',
@@ -108,6 +111,11 @@ export const constantRoutes = [
         name: 'Supplier',
         component: () => import('@/views/supplier/index'),
         meta: { title: '供应商名册管理', icon: 'table' }
+      }, {
+        path: 'customer',
+        name: 'Customer',
+        component: () => import('@/views/supplier/index'),
+        meta: { title: '客户名册管理', icon: 'table' }
       }
     ]
   },
@@ -119,7 +127,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'warehouse',
         component: () => import('@/views/warehouse/index'),
-        meta: { title: '仓库', icon: 'form' }
+        meta: { title: '库存管理', icon: 'form' }
       }
     ]
   }, {
@@ -144,7 +152,19 @@ export const constantRoutes = [
         meta: { title: '产品信息', icon: 'form' }
       }
     ]
+  },{
+    path: '/bom',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'BOM',
+        component: () => import('@/views/product/index'),
+        meta: { title: '产品物料清单', icon: 'form' }
+      }
+    ]
   },
+
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
