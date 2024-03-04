@@ -123,17 +123,6 @@ export const constantRoutes = [
       }
     ]
   }, {
-    path: '/goods',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Goods',
-        component: () => import('@/views/goods/index'),
-        meta: { title: '零件', icon: 'form' }
-      }
-    ]
-  }, {
     path: '/material',
     component: Layout,
     children: [
@@ -142,6 +131,17 @@ export const constantRoutes = [
         name: 'material',
         component: () => import('@/views/material/index'),
         meta: { title: '物料信息', icon: 'form' }
+      }
+    ]
+  }, {
+    path: '/product',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'product',
+        component: () => import('@/views/product/index'),
+        meta: { title: '产品信息', icon: 'form' }
       }
     ]
   },
