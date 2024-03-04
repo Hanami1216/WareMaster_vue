@@ -3,21 +3,22 @@
     <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="supplierList" border style="width: 100%">
-      <el-table-column fixed label="供应商名称" prop="supplier.supplier_name" />
-      <el-table-column fixed label="供应商描述" prop="supplier.description" />
-      <el-table-column fixed label="供应商价格" prop="supplier.price" />
-      <el-table-column fixed label="供应商名称" prop="supplier.supplier_name" />
-      <el-table-column fixed label="联系信息" prop="supplier.contact_info" />
-      <el-table-column fixed label="公司名称" prop="supplier.supplier_company" />
+      <el-table-column fixed label="供应商名称" prop="supplier_name" />
+      <el-table-column fixed label="联系信息" prop="contact_info" />
+      <el-table-column fixed label="公司名称" prop="supplier_company" />
+      <el-table-column fixed label="统一社会信用代码" prop="supplier_social_code" />
+      <el-table-column fixed label="收款账号" prop="bank_code" />
+      <el-table-column fixed label="公司地址" prop="company_address" />
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <!-- 修改 -->
-          <el-button size="small" type="text" @click="controller(scope.row.supplier)">编辑</el-button>
+          <el-button size="small" type="text" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button size="small" type="text" @click="deleteSupplier(scope.row.supplier.supplier_id)">删除</el-button>
+          <el-button size="small" type="text" @click="deleteSupplier(scope.row.supplier_id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+
     <Dialog ref="supplier" :before-close="beforeClose" :config="config" v-bind="supplierList" @close="resetForm">
       <el-form ref="supplierFrom" :model="supplierFormData" :rules="supplierRules" label-width="100px">
         <el-form-item label="供应商类型" prop="type_id">
@@ -38,7 +39,7 @@
 
 <script>
 
-import { addSupplier, deleteSupplier, getAllSupplier, modifySupplier } from '@/api/supplier'
+import { addSupplier, deleteSupplier, getSupplier, modifySupplier } from '@/api/supplier'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -107,7 +108,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      getAllSupplier().then(response => {
+      getSupplier().then(response => {
         this.supplierList = response.data
         this.listLoading = false
       })
