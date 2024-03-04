@@ -57,7 +57,7 @@ export default {
     return {
       // 所有产品
       productList: [
-        {'product': {
+        { 'product': {
           'product_id': 8,
           'product_name': 'D58矮座',
           'description': '个',
