@@ -58,15 +58,11 @@ export default {
     searchHandler() {
       // 搜索操作
       getAllBom({ productName: this.search }).then(response => {
-        console.log('1')
-        console.log(response)
         if (response.code === 20041) {
-          console.log('2')
           this.$message.success('获取所有物料信息成功')
-
           // 清空信息
-          // this.productList = []
-          // this.materialList = []
+          this.productList = []
+          this.materialList = []
           this.searchList = response.data
           this.searchList.forEach(item => {
             if (item.product) {
