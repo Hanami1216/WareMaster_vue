@@ -1,5 +1,6 @@
 <template>
   <div class="material-main">
+    <Search />
     <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
     <el-table v-loading="listLoading" :data="materialList" border style="width: 100%">
@@ -40,10 +41,11 @@
 
 import { addMaterial, deleteMaterial, getAllMaterial, modifyMaterial } from '@/api/material'
 import Dialog from '@/components/dialog.vue'
-
+import Search from './search.vue'
 export default {
   components: {
-    Dialog
+    Dialog,
+    Search
   },
   filters: {
     statusFilter(status) {
@@ -57,29 +59,17 @@ export default {
   },
   data() {
     return {
+      product: {
+        product_id: 8,
+        product_name: 'D58矮座',
+        description: '个',
+        price: 2.35,
+        cost: 2.2000,
+        is_available: 1,
+        is_deleted: 0
+      },
       // 所有物料
-      materialList: [{
-        supplier: {
-          supplier_id: 1,
-          supplier_name: '赵彩云',
-          contact_info: '123123123',
-          supplier_company: '广西科达',
-          supplier_social_code: 'dsfafdsafasdf',
-          bank_code: 'ddsfdsfadsf',
-          company_address: '广西',
-          is_deleted: 0
-        },
-        material: {
-          material_id: 11,
-          material_name: '从点非',
-          description:
-              '具总适片重按了展划最百压百气。想列报油白油系观规整称院元至化。干目着能团对领眼文只内儿时。你更国战较点不联导济对道日。革特只打际真器只须成感十须分好合。',
-          price: 1,
-          supplier_id: 1,
-          _deleted: false,
-          _available: true
-        }
-      }],
+      materialList: [],
       // 信息加载开关
       listLoading: true,
       config: {
@@ -91,24 +81,8 @@ export default {
       },
       materialFormData: {
         supplier: {
-          supplier_id: 1,
-          supplier_name: '赵彩云',
-          contact_info: '123123123',
-          supplier_company: '广西科达',
-          supplier_social_code: 'dsfafdsafasdf',
-          bank_code: 'ddsfdsfadsf',
-          company_address: '广西',
-          is_deleted: 0
         },
         material: {
-          material_id: 11,
-          material_name: '从点非',
-          description:
-              '具总适片重按了展划最百压百气。想列报油白油系观规整称院元至化。干目着能团对领眼文只内儿时。你更国战较点不联导济对道日。革特只打际真器只须成感十须分好合。',
-          price: null,
-          supplier_id: 1,
-          is_deleted: false,
-          is_available: true
         }
       },
       // 用户表单

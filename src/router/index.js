@@ -152,19 +152,18 @@ export const constantRoutes = [
         meta: { title: '产品信息', icon: 'form' }
       }
     ]
-  },{
+  }, {
     path: '/bom',
     component: Layout,
     children: [
       {
         path: 'index',
         name: 'BOM',
-        component: () => import('@/views/product/index'),
+        component: () => import('@/views/bom/index'),
         meta: { title: '产品物料清单', icon: 'form' }
       }
     ]
   },
-
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
