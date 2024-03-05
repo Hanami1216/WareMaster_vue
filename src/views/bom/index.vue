@@ -1,9 +1,9 @@
 <template>
   <div class="material-main">
-    <Search />
+    <Search @search="handleSearch" />
     <el-button @click="controller()">添加</el-button>
     <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
-    <el-table v-loading="listLoading" :data="materialList" border style="width: 100%">
+    <el-table :data="materialList" border style="width: 100%">
       <el-table-column fixed label="物料名称" prop="material.material_name" />
       <el-table-column fixed label="物料描述" prop="material.description" />
       <el-table-column fixed label="物料价格" prop="material.price" />
@@ -39,7 +39,7 @@
 
 <script>
 
-import { addMaterial, deleteMaterial, getAllMaterial, modifyMaterial } from '@/api/material'
+import { addMaterial, deleteMaterial, modifyMaterial } from '@/api/material'
 import Dialog from '@/components/dialog.vue'
 import Search from './search.vue'
 export default {
@@ -70,8 +70,6 @@ export default {
       },
       // 所有物料
       materialList: [],
-      // 信息加载开关
-      listLoading: true,
       config: {
         top: '10vh',
         width: '500px',
@@ -104,11 +102,9 @@ export default {
       console.log(row)
     },
     fetchData() {
-      this.listLoading = true
-      getAllMaterial().then(response => {
-        this.materialList = response.data
-        this.listLoading = false
-      })
+    },
+    handleSearch(data) {
+      this.materialList = data
     },
     // 启动弹窗
     controller(materialFormData) {

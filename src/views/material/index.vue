@@ -166,7 +166,6 @@ export default {
             } else {
               this.$message.error(response.data.msg)
             }
-
             // 获取数据
             this.fetchData()
           })

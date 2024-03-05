@@ -8,32 +8,39 @@
         <el-input
           v-model="search"
           placeholder="搜索产品"
-          @focus="focus"
-          @blur="blur"
           @keyup.enter.native="searchHandler"
         >
           <el-button id="search" slot="append" icon="el-icon-search" @click="searchHandler" />
         </el-input>
       </el-col>
     </el-row>
+    <el-table :data="productList" border style="width: 100%">
+      <el-table-column fixed label="产品名称" prop="product_name" />
+      <el-table-column fixed label="产品描述" prop="description" />
+      <el-table-column fixed label="产品价格" prop="price" />
+      <el-table-column fixed label="成本价格" prop="cost" />
+      <el-table-column fixed="right" label="操作" width="150">
+        <template slot-scope="scope">
+          <!-- 修改 -->
+          <el-button size="small" type="text" @click="editProduct(scope.row)">编辑</el-button>
+          <!-- 删除 -->
+          <el-button size="small" type="text" @click="deleteProduct(scope.row.product_id)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
 import { getAllBom } from '@/api/bom'
-import RandomUtil from '@/views/bom/RandomUtil'
-import Store from '@/views/bom/store'
+
 export default {
   data() {
     return {
       search: '', // 当前输入框的值
-      isFocus: false, // 是否聚焦
-      hotSearchList: ['暂无热门搜索'], // 热门搜索数据
-      historySearchList: [], // 历史搜索数据
-      searchList: ['暂无数据'], // 搜索返回数据,
-      history: false,
-      types: ['', 'success', 'info', 'warning', 'danger'], // 搜索历史tag式样
-      result: []
+      searchList: ['暂无数据'],
+      productList: [],
+      materialList: []
     }
   },
   computed: {
@@ -48,47 +55,33 @@ export default {
     }
   },
   methods: {
-    focus() {
-      this.isFocus = true
-      this.historySearchList =
-          Store.loadHistory() == null ? [] : Store.loadHistory()
-      this.history = this.historySearchList.length !== 0
-    },
-    blur() {
-      var self = this
-      this.searchBoxTimeout = setTimeout(function() {
-        self.isFocus = false
-      }, 300)
-    },
-    enterSearchBoxHanlder() {
-      clearTimeout(this.searchBoxTimeout)
-    },
     searchHandler() {
-      // 随机生成搜索历史tag式样
-      const n = RandomUtil.getRandomNumber(0, 5)
-      getAllBom({ productName: this.search }).then(response =>{
-        this.result = response.data
+      // 搜索操作
+      getAllBom({ productName: this.search }).then(response => {
+        console.log('1')
+        console.log(response)
+        if (response.code === 20041) {
+          console.log('2')
+          this.$message.success('获取所有物料信息成功')
+
+          // 清空信息
+          // this.productList = []
+          // this.materialList = []
+          this.searchList = response.data
+          this.searchList.forEach(item => {
+            if (item.product) {
+              this.productList.push(item.product)
+            } else {
+              this.materialList.push(item)
+            }
+            this.$emit('search', this.materialList)
+          })
+        } else {
+          this.$message.error(response.data.msg)
+        }
       })
-      const exist =
-          this.historySearchList.filter(value => {
-            return value.name === this.search
-          }).length !== 0
-      if (!exist) {
-        this.historySearchList.push({ name: this.search, type: this.types[n] })
-        Store.saveHistory(this.historySearchList)
-      }
-      this.history = this.historySearchList.length !== 0
     },
-    closeHandler(search) {
-      this.historySearchList.splice(this.historySearchList.indexOf(search), 1)
-      Store.saveHistory(this.historySearchList)
-      clearTimeout(this.searchBoxTimeout)
-      if (this.historySearchList.length === 0) {
-        this.history = false
-      }
-    },
-    removeAllHistory() {
-      Store.removeAllHistory()
+    closeHandler() {
     }
   }
 }
