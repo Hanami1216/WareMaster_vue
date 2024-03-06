@@ -30,9 +30,9 @@
           <el-select v-model="selectedMaterial" placeholder="请选择">
             <el-option
               v-for="item in material_list"
-              :key="item"
+              :key="item.material.material_name"
               :label="item.material.material_name"
-              :value="item"
+              :value="item.material.material_name"
             />
           </el-select>
         </el-form-item>
