@@ -13,20 +13,15 @@
           <el-button id="search" slot="append" icon="el-icon-search" @click="searchHandler" />
         </el-input>
       </el-col>
+      <el-col :span="2" class="right">
+        <el-button @click="addMaterialInfo">产品物料信息添加</el-button>
+      </el-col>
     </el-row>
     <el-table :data="productList" border style="width: 100%">
       <el-table-column fixed label="产品名称" prop="product_name" />
       <el-table-column fixed label="产品描述" prop="description" />
       <el-table-column fixed label="产品价格" prop="price" />
       <el-table-column fixed label="成本价格" prop="cost" />
-      <el-table-column fixed="right" label="操作" width="150">
-        <template slot-scope="scope">
-          <!-- 修改 -->
-          <el-button size="small" type="text" @click="editProduct(scope.row)">编辑</el-button>
-          <!-- 删除 -->
-          <el-button size="small" type="text" @click="deleteProduct(scope.row.product_id)">删除</el-button>
-        </template>
-      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -77,6 +72,9 @@ export default {
         }
       })
     },
+    addMaterialInfo() {
+      this.$message.success('成功')
+    },
     closeHandler() {
     }
   }
@@ -91,6 +89,10 @@ export default {
     margin-top: 15px;
     margin-left: 200px;
   }
+  .right {
+    margin-top: 20px;
+    margin-left:200px;
+  }
   #search {
     background-color: #ffffffff;
     border-radius: 0%;
@@ -100,16 +102,5 @@ export default {
     font-size: 15px;
     margin-bottom: 5px;
   }
-  .remove-history {
-    color: #bdbaba;
-    font-size: 15px;
-    float: right;
-    margin-top: -22px;
-  }
-  #search-box {
-    width: 555px;
-    height: 300px;
-    margin-top: 0px;
-    padding-bottom: 20px;
-  }
+
   </style>
