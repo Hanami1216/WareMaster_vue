@@ -1,3 +1,4 @@
+
 <template>
   <el-dialog
     :before-close="beClose"
@@ -10,9 +11,9 @@
   >
 
     <!-- 加上v-if 防止在弹窗中嵌套一些其他组件时，那些组件的生命周期只会执行一次的问题出现 -->
-    <slot v-if="visibleSlot"/>
+    <slot v-if="visibleSlot" />
     <!-- 给弹窗中加入的主体内容都会出现在这里 -->
-    <div slot="footer"/>
+    <div slot="footer" />
     <!-- 下方功能键在这里 -->
   </el-dialog>
 </template>
@@ -31,7 +32,9 @@ export default {
       type: Function,
       default: () => {
       }
-    }
+    },
+    productList: Array,
+    material_list: Array
   },
   data() {
     const {
@@ -42,6 +45,7 @@ export default {
       btnTxt = ['取消', '确定']
     } = this.config || {}
     return {
+      MaterialList: [],
       visible: false,
       attributes: {
         top,

@@ -23,19 +23,39 @@
       <el-table-column fixed label="产品价格" prop="price" />
       <el-table-column fixed label="成本价格" prop="cost" />
     </el-table>
+    <AddMaterialInfo ref="openDialog" v-model="productList" :material_list="material_list" :before-close="beforeClose" :config="config" @close="resetForm">
+      <el-form v-model="productList" label-width="100px">
+        <el-form-item label="产品名称" prop="product_name">{{ this.$attrs.product_name }}</el-form-item>
+        <el-form-item label="物料名称" prop="" />
+        <el-form-item label="操作">
+          <el-button @click="add()">添加</el-button>
+        </el-form-item>
+      </el-form></AddMaterialInfo>
   </div>
 </template>
 
 <script>
 import { getAllBom } from '@/api/bom'
-
+import { getAllMaterial } from '@/api/material'
+import AddMaterialInfo from './AddMaterialInfo.vue'
 export default {
+  components: {
+    AddMaterialInfo
+  },
   data() {
     return {
       search: '', // 当前输入框的值
       searchList: ['暂无数据'],
       productList: [],
-      materialList: []
+      materialList: [],
+      material_list: [],
+      config: {
+        top: '10vh',
+        width: '500px',
+        title: '物料信息添加',
+        center: true,
+        btnTxt: ['取消', '提交']
+      }
     }
   },
   computed: {
@@ -50,6 +70,9 @@ export default {
     }
   },
   methods: {
+    beforeClose() {
+      console.log('关闭')
+    },
     searchHandler() {
       // 搜索操作
       getAllBom({ productName: this.search }).then(response => {
@@ -74,8 +97,21 @@ export default {
     },
     addMaterialInfo() {
       this.$message.success('成功')
+      getAllMaterial().then(response => {
+        this.material_list = response.data
+      })
+      this.$refs.openDialog.open(cancel => {
+        // cancel();
+        console.log('点击提交按钮了')
+      })
+        .then(() => {
+          console.log(this.$refs.span)
+        })
     },
     closeHandler() {
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
