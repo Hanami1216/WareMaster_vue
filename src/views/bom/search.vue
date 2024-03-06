@@ -24,9 +24,18 @@
       <el-table-column fixed label="成本价格" prop="cost" />
     </el-table>
     <AddMaterialInfo ref="openDialog" v-model="productList" :material_list="material_list" :before-close="beforeClose" :config="config" @close="resetForm">
-      <el-form v-model="productList" label-width="100px">
+      <el-form label-width="100px">
         <el-form-item label="产品名称" prop="product_name">{{ this.$attrs.product_name }}</el-form-item>
-        <el-form-item label="物料名称" prop="" />
+        <el-form-item label="物料名称" prop="">
+          <el-select v-model="selectedMaterial" placeholder="请选择">
+            <el-option
+              v-for="item in material_list"
+              :key="item"
+              :label="item.material.material_name"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
         </el-form-item>
@@ -48,6 +57,7 @@ export default {
       searchList: ['暂无数据'],
       productList: [],
       materialList: [],
+      selectedMaterial: null,
       material_list: [],
       config: {
         top: '10vh',
