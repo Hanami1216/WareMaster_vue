@@ -5,11 +5,7 @@
         <img src="//s0.meituan.net/bs/fe-web-meituan/fa5f0f0/img/logo.png" alt="美团">
       </el-col>
       <el-col :span="8" class="center">
-        <el-input
-          v-model="search"
-          placeholder="搜索产品"
-          @keyup.enter.native="searchHandler"
-        >
+        <el-input v-model="search" placeholder="搜索产品" @keyup.enter.native="searchHandler">
           <el-button id="search" slot="append" icon="el-icon-search" @click="searchHandler" />
         </el-input>
       </el-col>
@@ -23,9 +19,11 @@
       <el-table-column fixed label="产品价格" prop="price" />
       <el-table-column fixed label="成本价格" prop="cost" />
     </el-table>
-    <AddMaterialInfo ref="openDialog" v-model="productList" :material_list="material_list" :before-close="beforeClose" :config="config" @close="resetForm">
+    <AddMaterialInfo ref="openDialog" :before-close="beforeClose" :config="config" @close="resetForm">
       <el-form label-width="100px">
-        <el-form-item label="产品名称" prop="product_name">{{ this.$attrs.product_name }}</el-form-item>
+        <el-form-item label="产品名称" prop="">
+          <h1 v-for="product in productList" :key="product.product_id">{{ product.product_name }}</h1>
+        </el-form-item>
         <el-form-item label="物料名称" prop="">
           <el-select v-model="selectedMaterial" placeholder="请选择">
             <el-option
@@ -39,7 +37,8 @@
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
         </el-form-item>
-      </el-form></AddMaterialInfo>
+      </el-form>
+    </AddMaterialInfo>
   </div>
 </template>
 
@@ -127,26 +126,29 @@ export default {
 }
 </script>
 
-  <style>
-  .left {
-    margin-left: 200px;
-  }
-  .center {
-    margin-top: 15px;
-    margin-left: 200px;
-  }
-  .right {
-    margin-top: 20px;
-    margin-left:200px;
-  }
-  #search {
-    background-color: #ffffffff;
-    border-radius: 0%;
-  }
-  .search-title {
-    color: #bdbaba;
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
+<style>
+.left {
+  margin-left: 200px;
+}
 
-  </style>
+.center {
+  margin-top: 15px;
+  margin-left: 200px;
+}
+
+.right {
+  margin-top: 20px;
+  margin-left: 200px;
+}
+
+#search {
+  background-color: #ffffffff;
+  border-radius: 0%;
+}
+
+.search-title {
+  color: #bdbaba;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+</style>

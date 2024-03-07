@@ -27,8 +27,9 @@ module.exports = {
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  // lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
+  lintOnSave: false, // 关闭eslint
   devServer: {
     port: port,
     open: true,
