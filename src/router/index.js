@@ -114,7 +114,7 @@ export const constantRoutes = [
       }, {
         path: 'customer',
         name: 'Customer',
-        component: () => import('@/views/supplier/index'),
+        component: () => import('@/views/customer/index'),
         meta: { title: '客户名册管理', icon: 'table' }
       }
     ]
