@@ -58,23 +58,48 @@
     <!-- 操作弹窗 -->
     <Dialog ref="user" :before-close="beforeClose" :config="config" v-bind="user" @close="resetForm">
       <el-form ref="userForm" :model="userFormData" :rules="userRules" label-width="100px">
-        <el-form-item label="姓名" prop="user_name">
+        <el-form-item label="用户名" prop="user_name">
           <el-input v-model="userFormData.user_name" />
         </el-form-item>
-        <el-form-item label="性别" prop="user_sex">
-          <el-input v-model="userFormData.user_sex" />
+        <el-form-item label="昵称" prop="nick_name">
+          <el-input v-model="userFormData.nick_name" />
         </el-form-item>
-        <el-form-item label="年龄" prop="user_age">
-          <el-input v-model="userFormData.user_age" />
+        <el-form-item label="密码" prop="password" >
+          <el-input v-model="userFormData.password" type="password" :show-password="true"/>
         </el-form-item>
-        <el-form-item label="电话" prop="user_tel">
-          <el-input v-model="userFormData.user_tel" />
+        <el-form-item label="账号状态" prop="status">
+          <el-select v-model="userFormData.status" placeholder="请选择账号状态">
+            <el-option label="正常" value="0" />
+            <el-option label="停用" value="1" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="薪水" prop="user_salary">
-          <el-input v-model="userFormData.user_salary" />
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="userFormData.email" />
         </el-form-item>
-        <el-form-item label="密码" prop="user_password">
-          <el-input v-model="userFormData.user_password" />
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="userFormData.phone" />
+        </el-form-item>
+        <el-form-item label="用户性别" prop="sex">
+          <el-select v-model="userFormData.sex" placeholder="请选择用户性别">
+            <el-option label="男" value="0" />
+            <el-option label="女" value="1" />
+            <el-option label="未知" value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户类型" prop="user_type">
+          <el-select v-model="userFormData.user_type" placeholder="请选择用户类型">
+            <el-option label="超级管理员" value="0" />
+            <el-option label="管理员" value="1" />
+            <el-option label="员工" value="2" />
+            <el-option label="供应商" value="3" />
+            <el-option label="客户" value="4" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="删除标志" prop="is_delete">
+          <el-select v-model="userFormData.is_delete" placeholder="请选择删除标志">
+            <el-option label="未删除" value="0" />
+            <el-option label="已删除" value="1" />
+          </el-select>
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="addUser">添加</el-button>
@@ -108,17 +133,7 @@ export default {
   data() {
     return {
       // 所有用户对象
-      user: [{
-        id: '1',
-        user_name: 'root',
-        nick_name: '贪玩の計算姬',
-        password: '$2a$10$estRqCrug679FKMi1y5OxuXiiJ43I2g2hqebIriEkyNsEcqznHj9u',
-        status: 0,
-        email: '1151509140',
-        phone: '18038992335',
-        sex: 1,
-        user_type: 0
-      }],
+      user: [],
       // 信息加载开关
       listLoading: true,
       config: {
@@ -130,12 +145,12 @@ export default {
       },
       // 用户表单
       userFormData: {
-        id: '1',
+        id: null,
         user_name: 'root',
         nick_name: '贪玩の計算姬',
-        password: '$2a$10$estRqCrug679FKMi1y5OxuXiiJ43I2g2hqebIriEkyNsEcqznHj9u',
+        password: 'root',
         status: '0',
-        email: '1151509140',
+        email: '1151509140@qq.com',
         phone: '18038992335',
         sex: 1,
         user_type: 0
@@ -143,25 +158,38 @@ export default {
       // 表单规则
       userRules: {
         user_name: [
-          { required: true, message: '请输入管理员名称', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
+          { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]*$/, message: '用户名只能包含中文、字母、数字和下划线', trigger: 'blur' }
         ],
-        user_sex: [
-          { required: true, message: '请输入性别', trigger: 'blur' }
+        nick_name: [
+          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
+          { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]*$/, message: '昵称只能包含中文、字母、数字和下划线', trigger: 'blur' }
         ],
-        user_age: [
-          { required: true, message: '请输入年龄', trigger: 'blur' }
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' }
         ],
-        user_tel: [
-          { required: true, message: '请输入电话', trigger: 'blur' }
+        status: [
+          { required: true, message: '请选择用户状态', trigger: 'change' }
         ],
-        user_salary: [
-          { required: true, message: '请输入薪水', trigger: 'blur' }
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
         ],
-        user_password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+        phone: [
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
+          { pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }
+        ],
+        sex: [
+          { required: true, message: '请选择性别', trigger: 'change' }
+        ],
+        user_type: [
+          { required: true, message: '请选择用户类型', trigger: 'change' }
         ]
       }
+
       // 尾
     }
   },
