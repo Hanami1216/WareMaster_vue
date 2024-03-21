@@ -16,9 +16,9 @@ export function getCustomer(params) {
  *添加客户信息
  * @returns data
  */
-export function addConsignee(data) {
+export function addCustomer(data) {
   return request({
-    url: '/customer/info/one',
+    url: '/customer/info',
     method: 'post',
     data
   })
@@ -28,7 +28,7 @@ export function addConsignee(data) {
  *修改客户信息
  * @returns data
  */
-export function modifyConsignee(data) {
+export function modifyCustomer(data) {
   return request({
     url: '/customer/info',
     method: 'put',
@@ -40,11 +40,11 @@ export function modifyConsignee(data) {
  *删除客户信息
  * @returns data
  */
-export function deleteConsignee(params) {
+export function deleteCustomer(id) {
   return request({
     url: '/customer/info',
     method: 'delete',
-    params
+    params: { id: id }
   })
 }
 
