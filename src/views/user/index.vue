@@ -124,7 +124,7 @@ export default {
         id: null,
         user_name: null,
         nick_name: '潘豪',
-        password: 123456,
+        password: '123456',
         status: '0',
         email: '1151509140@qq.com',
         phone: '18038992335',
@@ -209,7 +209,7 @@ export default {
           userRegister(this.userFormData).then(response => {
             // 关闭弹窗
             this.$refs.user.cancel()
-            if (response.data.code === 20011) {
+            if (response.code === 20011) {
               this.$message.success('添加成功')
               this.fetchData()
             } else {
@@ -232,7 +232,7 @@ export default {
             // 关闭弹窗
             this.$refs.user.cancel()
 
-            if (response.data.code === 20031) {
+            if (response.code === 20031) {
               this.$message.success('修改成功')
             } else {
               this.$message.error('修改失败')
@@ -249,8 +249,9 @@ export default {
     // 发送删除请求
     deleteUser(id) {
       deleteUser(id).then(response => {
-        if (response.data.code === 20021) {
-          this.$message.success('修改成功')
+        console.log(response)
+        if (response.code === 20021) {
+          this.$message.success('删除成功')
           this.fetchData()
         } else {
           this.$message.error(response.data.msg)
