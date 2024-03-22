@@ -176,7 +176,7 @@ export default {
             if (response.code === 20011) {
               this.$message.success('添加成功')
             } else {
-              this.$message.error(response.data.msg)
+              this.$message.error('添加失败')
             }
 
             // 获取数据
@@ -215,7 +215,7 @@ export default {
         if (response.code === 20021) {
           this.$message.success('删除成功')
         } else {
-          this.$message.error(response.data.msg)
+          this.$message.error(response.msg)
         }
         // 获取数据
         this.fetchData()

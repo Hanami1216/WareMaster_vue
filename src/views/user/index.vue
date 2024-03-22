@@ -45,9 +45,10 @@
         <el-form-item label="昵称" prop="nick_name">
           <el-input v-model="userFormData.nick_name" />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <!-- 暂时不允许修改密码 -->
+        <!-- <el-form-item label="密码" prop="password">
           <el-input v-model="userFormData.password" type="password" :show-password="true" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="账号状态" prop="status">
           <el-select v-model="userFormData.status" placeholder="请选择账号状态">
             <el-option label="正常" value="0" />
