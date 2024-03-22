@@ -33,7 +33,7 @@ export function logout() {
  */
 export function getUser(params) {
   return request({
-    url: '/user',
+    url: '/user/info/all',
     method: 'get',
     params
   })
@@ -68,9 +68,11 @@ export function modifyUser(data) {
  * @returns data
  */
 export function deleteUser(id) {
+  console.log('zheshi' + id)
   return request({
-    url: '/user/' + id,
-    method: 'delete'
+    url: '/user/info',
+    method: 'delete',
+    params: { id: id }
   })
 }
 

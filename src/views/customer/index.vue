@@ -173,7 +173,7 @@ export default {
           addCustomer(this.customerFormData).then(response => {
             // 关闭弹窗
             this.$refs.customer.cancel()
-            if (response.data.result === 20011) {
+            if (response.data.code === 20011) {
               this.$message.success('添加成功')
             } else {
               this.$message.error(response.data.msg)
@@ -195,7 +195,7 @@ export default {
             // 关闭弹窗
             this.$refs.customer.cancel()
 
-            if (response.data.result === 20031) {
+            if (response.data.code === 20031) {
               this.$message.success('修改成功')
             } else {
               this.$message.error('修改失败')
@@ -212,7 +212,7 @@ export default {
     // 发送删除请求
     deleteCustomer(id) {
       deleteCustomer(id).then(response => {
-        if (response.data.result === 20021) {
+        if (response.data.code === 20021) {
           this.$message.success('删除成功')
         } else {
           this.$message.error(response.data.msg)

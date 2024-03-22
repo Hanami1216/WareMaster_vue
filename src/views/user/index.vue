@@ -11,46 +11,27 @@
       <el-table-column fixed label="电话" prop="phone" width="150" />
       <el-table-column fixed label="性别" prop="sex" width="150">
         <template slot-scope="scope">
-          <span
-            v-show="scope.row.sex === 0 "
-          >男</span>
-          <span
-            v-show="scope.row.user_type === 1 "
-          >女</span>
+          <span v-show="scope.row.sex === 0">男</span>
+          <span v-show="scope.row.user_type === 1">女</span>
         </template>
       </el-table-column>
-      <el-table-column
-        fixed
-        label="用户类型"
-        width="150"
-      >
+      <el-table-column fixed label="用户类型" width="150">
         <template slot-scope="scope">
-          <span
-            v-show="scope.row.user_type === 0 "
-          >超级管理员</span>
-          <span
-            v-show="scope.row.user_type === 1 "
-          >管理员</span>
-          <span
-            v-show="scope.row.user_type === 2 "
-          >员工</span>
-          <span
-            v-show="scope.row.user_type === 3 "
-          >供应商</span>
-          <span
-            v-show="scope.row.user_type === 4 "
-          >客户</span>
+          <span v-show="scope.row.user_type === 0">超级管理员</span>
+          <span v-show="scope.row.user_type === 1">管理员</span>
+          <span v-show="scope.row.user_type === 2">员工</span>
+          <span v-show="scope.row.user_type === 3">供应商</span>
+          <span v-show="scope.row.user_type === 4">客户</span>
         </template>
       </el-table-column>
 
       <!-- 操作 -->
       <el-table-column fixed="left" label="操作" width="150">
-        // eslint-disable-next-line vue/no-unused-vars
         <template slot-scope="scope">
           <!-- 修改 -->
           <el-button size="small" type="text" @click="controller(scope.row)">编辑</el-button>
           <!-- 删除 -->
-          <el-button size="small" type="text" @click="deleteUser(scope.row.user_id)">删除</el-button>
+          <el-button size="small" type="text" @click="deleteUser(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,8 +45,8 @@
         <el-form-item label="昵称" prop="nick_name">
           <el-input v-model="userFormData.nick_name" />
         </el-form-item>
-        <el-form-item label="密码" prop="password" >
-          <el-input v-model="userFormData.password" type="password" :show-password="true"/>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="userFormData.password" type="password" :show-password="true" />
         </el-form-item>
         <el-form-item label="账号状态" prop="status">
           <el-select v-model="userFormData.status" placeholder="请选择账号状态">
@@ -95,12 +76,7 @@
             <el-option label="客户" value="4" />
           </el-select>
         </el-form-item>
-        <el-form-item label="删除标志" prop="is_delete">
-          <el-select v-model="userFormData.is_delete" placeholder="请选择删除标志">
-            <el-option label="未删除" value="0" />
-            <el-option label="已删除" value="1" />
-          </el-select>
-        </el-form-item>
+
         <el-form-item label="操作">
           <el-button @click="addUser">添加</el-button>
           <el-button @click="modifyUser">修改</el-button>
@@ -139,21 +115,21 @@ export default {
       config: {
         top: '10vh',
         width: '500px',
-        title: '温馨提示',
+        title: '信息修改',
         center: true,
         btnTxt: ['取消', '提交']
       },
       // 用户表单
       userFormData: {
         id: null,
-        user_name: 'root',
-        nick_name: '贪玩の計算姬',
-        password: 'root',
+        user_name: null,
+        nick_name: '潘豪',
+        password: 123456,
         status: '0',
         email: '1151509140@qq.com',
         phone: '18038992335',
-        sex: 1,
-        user_type: 0
+        sex: null,
+        user_type: null
       },
       // 表单规则
       userRules: {
@@ -233,10 +209,11 @@ export default {
           userRegister(this.userFormData).then(response => {
             // 关闭弹窗
             this.$refs.user.cancel()
-            if (response.data.result === 20011) {
+            if (response.data.code === 20011) {
               this.$message.success('添加成功')
+              this.fetchData()
             } else {
-              this.$message.error('添加成功')
+              this.$message.error('添加失败')
             }
 
             // 获取数据
@@ -255,7 +232,7 @@ export default {
             // 关闭弹窗
             this.$refs.user.cancel()
 
-            if (response.data.result === 20031) {
+            if (response.data.code === 20031) {
               this.$message.success('修改成功')
             } else {
               this.$message.error('修改失败')
@@ -272,13 +249,12 @@ export default {
     // 发送删除请求
     deleteUser(id) {
       deleteUser(id).then(response => {
-        if (response.data.result === 20021) {
+        if (response.data.code === 20021) {
           this.$message.success('修改成功')
+          this.fetchData()
         } else {
           this.$message.error(response.data.msg)
         }
-        // 获取数据
-        this.fetchData()
       })
     },
     userDataRef(userForm) {
