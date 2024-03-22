@@ -1,31 +1,57 @@
 <template>
   <div class="material-main">
     <el-button @click="controller()">添加</el-button>
-    <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
-    <el-table v-loading="listLoading" :data="materialList" border style="width: 100%">
-      <el-table-column type="index" label="序号" width="60" />
-      <el-table-column fixed label="物料名称" prop="material.material_name" />
-      <el-table-column fixed label="物料描述" prop="material.description" />
-      <el-table-column fixed label="物料价格" prop="material.price" />
-      <el-table-column fixed label="供应商名称" prop="supplier.supplier_name" />
-      <el-table-column fixed label="联系信息" prop="supplier.contact_info" />
-      <el-table-column fixed label="公司名称" prop="supplier.supplier_company" />
-      <el-table-column fixed="right" label="操作" width="150">
-        <template slot-scope="scope">
-          <!-- 修改 -->
-          <el-button size="small" type="text" @click="controller(scope.row.material)">编辑</el-button>
-          <!-- 删除 -->
-          <el-button size="small" type="text" @click="deleteMaterial(scope.row.material.material_id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div>
+      <el-table v-loading="loading" :data="currentPageData" border size="mini">
+        <el-table-column align="center" label="序号" type="index" width="70px" show-overflow-tooltip />
+        <el-table-column
+          v-for="column in columns"
+          :key="column.prop"
+          :prop="column.prop"
+          :label="column.label"
+          align="center"
+          show-overflow-tooltip
+        />
+        <el-table-column fixed="right" label="操作" width="150">
+          <template slot-scope="scope">
+            <!-- 修改 -->
+            <el-button size="small" type="text" @click="controller(scope.row.material)">编辑</el-button>
+            <!-- 删除 -->
+            <el-button size="small" type="text" @click="deleteMaterial(scope.row.material.material_id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align:center">
+        <el-pagination
+          hide-on-single-page
+          background
+          layout="prev, pager, next,total"
+          :total="total"
+          :page-size="pagesize"
+          @current-change="currentChange"
+        />
+      </div>
+    </div>
     <Dialog ref="material" :before-close="beforeClose" :config="config" v-bind="materialList" @close="resetForm">
       <el-form ref="materialFrom" :model="materialFormData" :rules="materialRules" label-width="100px">
-        <el-form-item label="物料类型" prop="type_id">
-          <el-input v-model="materialFormData.type_id" />
+        <el-form-item label="物料名称" prop="material_name">
+          <el-input v-model="materialFormData.material_name" />
         </el-form-item>
-        <el-form-item label="物料库存" prop="in_stock">
-          <el-input v-model="materialFormData.in_stock" />
+        <el-form-item label="物料描述" prop="description">
+          <el-input v-model="materialFormData.description" />
+        </el-form-item>
+        <el-form-item label="物料价格" prop="price">
+          <el-input v-model="materialFormData.price" />
+        </el-form-item>
+        <el-form-item label="供应商名称" prop="supplier_id">
+          <el-select v-model="materialFormData.supplier_id" placeholder="请选择">
+            <el-option
+              v-for="item in supplierList"
+              :key="item.supplier_name"
+              :label="item.supplier_name"
+              :value="item.supplier_id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
@@ -40,6 +66,7 @@
 <script>
 
 import { addMaterial, deleteMaterial, getAllMaterial, modifyMaterial } from '@/api/material'
+import { getSupplier } from '@/api/supplier'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -58,6 +85,7 @@ export default {
   },
   data() {
     return {
+      supplierList: [],
       // 所有物料
       materialList: [{
         supplier: {
@@ -74,7 +102,7 @@ export default {
           material_id: 11,
           material_name: '从点非',
           description:
-              '具总适片重按了展划最百压百气。想列报油白油系观规整称院元至化。干目着能团对领眼文只内儿时。你更国战较点不联导济对道日。革特只打际真器只须成感十须分好合。',
+            '规格描述',
           price: 1,
           supplier_id: 1,
           _deleted: false,
@@ -91,26 +119,13 @@ export default {
         btnTxt: ['取消', '提交']
       },
       materialFormData: {
-        supplier: {
-          supplier_id: 1,
-          supplier_name: '赵彩云',
-          contact_info: '123123123',
-          supplier_company: '广西科达',
-          supplier_social_code: 'dsfafdsafasdf',
-          bank_code: 'ddsfdsfadsf',
-          company_address: '广西',
-          is_deleted: 0
-        },
-        material: {
-          material_id: 11,
-          material_name: '从点非',
-          description:
-              '具总适片重按了展划最百压百气。想列报油白油系观规整称院元至化。干目着能团对领眼文只内儿时。你更国战较点不联导济对道日。革特只打际真器只须成感十须分好合。',
-          price: null,
-          supplier_id: 1,
-          is_deleted: false,
-          is_available: true
-        }
+        material_id: null,
+        material_name: '物料名称',
+        description: '规格描述',
+        price: 0,
+        supplier_id: 1,
+        is_deleted: 0,
+        is_available: 0
       },
       // 用户表单
       // 表单规则
@@ -118,8 +133,29 @@ export default {
         id: 1,
         type_id: 1,
         in_stock: 1
-      }
+      },
+      loading: false,
+      total: 100, // 总条目数，需要根据实际情况设置
+      pagesize: 10, // 每页显示的条目数1
+      currentPage: 1, // 当前页码
+      columns: [ // 表格列配置
+        { prop: 'material.material_name', label: '物料名称' },
+        { prop: 'material.description', label: '物料描述' },
+        { prop: 'material.price', label: '价格' },
+        { prop: 'supplier.supplier_company', label: '联系方式' },
+        { prop: 'supplier.supplier_name', label: '供应商姓名' },
+        { prop: 'supplier.contact_info', label: '联系方式' }
+        // 其他列配置
+      ]
       // 尾
+    }
+  },
+  computed: {
+    currentPageData() {
+      // 根据当前页码和每页显示的条目数截取数据
+      const startIndex = (this.currentPage - 1) * this.pagesize
+      const endIndex = this.currentPage * this.pagesize
+      return this.materialList.slice(startIndex, endIndex)
     }
   },
   created() {
@@ -137,9 +173,19 @@ export default {
         this.listLoading = false
       })
     },
+
+    currentChange(currentPage) {
+      // 处理分页变化事件
+      this.currentPage = currentPage
+      // 从后端获取当前页数据
+      this.fetchData()
+    },
     // 启动弹窗
     controller(materialFormData) {
       this.MaterialDataRef(materialFormData)
+      getSupplier().then(response => {
+        this.supplierList = response.data
+      })
       this.$refs.material.open(
         cancel => {
           // cancel();
@@ -162,10 +208,10 @@ export default {
           addMaterial(this.materialFormData).then(response => {
             // 关闭弹窗
             this.$refs.material.cancel()
-            if (response.data.result === 20011) {
+            if (response.result === 20011) {
               this.$message.success('添加成功')
             } else {
-              this.$message.error(response.data.msg)
+              this.$message.error(response.msg)
             }
             // 获取数据
             this.fetchData()
@@ -183,7 +229,7 @@ export default {
             // 关闭弹窗
             this.$refs.material.cancel()
 
-            if (response.data.result === 20031) {
+            if (response.result === 20031) {
               this.$message.success('修改成功')
             } else {
               this.$message.error('修改失败')
@@ -200,10 +246,10 @@ export default {
     // 发送删除请求
     deleteMaterial(id) {
       deleteMaterial(id).then(response => {
-        if (response.data.result === 20021) {
+        if (response.result === 20021) {
           this.$message.success('删除成功')
         } else {
-          this.$message.error(response.data.msg)
+          this.$message.error(response.msg)
         }
         // 获取数据
         this.fetchData()
