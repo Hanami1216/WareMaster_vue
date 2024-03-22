@@ -42,8 +42,9 @@ export function modifyMaterial(data) {
  */
 export function deleteMaterial(id) {
   return request({
-    url: '/material/info' + id,
-    method: 'delete'
+    url: '/material/info',
+    method: 'delete',
+    params: { id: id }
   })
 }
 

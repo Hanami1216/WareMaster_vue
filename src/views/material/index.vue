@@ -142,7 +142,7 @@ export default {
         { prop: 'material.material_name', label: '物料名称' },
         { prop: 'material.description', label: '物料描述' },
         { prop: 'material.price', label: '价格' },
-        { prop: 'supplier.supplier_company', label: '联系方式' },
+        { prop: 'supplier.supplier_company', label: '公司名称' },
         { prop: 'supplier.supplier_name', label: '供应商姓名' },
         { prop: 'supplier.contact_info', label: '联系方式' }
         // 其他列配置
@@ -208,7 +208,7 @@ export default {
           addMaterial(this.materialFormData).then(response => {
             // 关闭弹窗
             this.$refs.material.cancel()
-            if (response.result === 20011) {
+            if (response.code === 20011) {
               this.$message.success('添加成功')
             } else {
               this.$message.error(response.msg)
@@ -229,7 +229,7 @@ export default {
             // 关闭弹窗
             this.$refs.material.cancel()
 
-            if (response.result === 20031) {
+            if (response.code === 20031) {
               this.$message.success('修改成功')
             } else {
               this.$message.error('修改失败')
@@ -246,7 +246,7 @@ export default {
     // 发送删除请求
     deleteMaterial(id) {
       deleteMaterial(id).then(response => {
-        if (response.result === 20021) {
+        if (response.code === 20021) {
           this.$message.success('删除成功')
         } else {
           this.$message.error(response.msg)
