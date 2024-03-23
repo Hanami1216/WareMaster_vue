@@ -110,7 +110,7 @@ export default {
             } else {
               this.materialList.push(item)
             }
-            this.$emit('search', this.materialList)
+            this.$emit('search', this.materialList, this.product)
           })
         } else {
           this.$message.error(response.data.msg)
