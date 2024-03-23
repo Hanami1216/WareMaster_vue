@@ -129,11 +129,7 @@ export default {
       },
       // 用户表单
       // 表单规则
-      materialRules: {
-        id: 1,
-        type_id: 1,
-        in_stock: 1
-      },
+      materialRules: { },
       loading: false,
       total: 100, // 总条目数，需要根据实际情况设置
       pagesize: 10, // 每页显示的条目数1
