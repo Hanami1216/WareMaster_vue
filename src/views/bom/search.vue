@@ -10,7 +10,7 @@
         </el-input>
       </el-col>
       <el-col :span="2" class="right">
-        <el-button @click="addMaterialInfo">产品物料信息添加</el-button>
+        <el-button @click="openMaterialInfoFromWindows">产品物料信息添加</el-button>
       </el-col>
     </el-row>
     <el-table :data="productList" border style="width: 100%">
@@ -57,7 +57,7 @@ export default {
       productList: [],
       materialList: [],
       selectedMaterial: null,
-      material_list: [],
+      material_list: [], // 物料选择下拉框数据
       config: {
         top: '10vh',
         width: '500px',
@@ -104,8 +104,9 @@ export default {
         }
       })
     },
-    addMaterialInfo() {
-      this.$message.success('成功')
+    // 添加物料信息
+    openMaterialInfoFromWindows() {
+      this.$message.success('窗口打开成功')
       getAllMaterial().then(response => {
         this.material_list = response.data
       })

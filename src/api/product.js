@@ -25,7 +25,7 @@ export function addProduct(data) {
 }
 
 /**
- *修改零件信息
+ *修改产品信息
  * @returns data
  */
 export function modifyProduct(data) {
@@ -37,13 +37,14 @@ export function modifyProduct(data) {
 }
 
 /**
- *删除零件信息
+ *删除产品信息
  * @returns data
  */
 export function deleteProduct(id) {
   return request({
-    url: '/product/info' + id,
-    method: 'delete'
+    url: '/product/info',
+    method: 'delete',
+    params: { id: id }
   })
 }
 
