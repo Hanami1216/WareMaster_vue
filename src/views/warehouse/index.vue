@@ -1,6 +1,6 @@
 <template>
   <div class="inventory-main">
-    <el-button @click="controller()">添加</el-button>
+    <el-button @click="openInventoryAddWindows()">添加</el-button>
     <div>
       <el-table v-loading="loading" :data="currentPageData" border size="mini">
         <el-table-column align="center" label="序号" type="index" width="70px" show-overflow-tooltip />
@@ -15,7 +15,7 @@
         <el-table-column fixed="right" label="操作" width="150">
           <template slot-scope="scope">
             <!-- 修改 -->
-            <el-button size="small" type="text" @click="controller(scope.row.inventory)">编辑</el-button>
+            <el-button size="small" type="text" @click="openEditWindows(scope.row.inventory)">编辑</el-button>
             <!-- 删除 -->
             <el-button size="small" type="text" @click="deleteInventory(scope.row.inventory.inventory_id)">删除</el-button>
           </template>
@@ -32,7 +32,7 @@
         />
       </div>
     </div>
-    <Dialog ref="inventory" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
+    <Dialog ref="inventoryAddWindows" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
       <el-form ref="inventoryFrom" :model="inventoryFormData" :rules="inventoryRules" label-width="100px">
         <el-form-item label="产品型号选择" prop="product_id">
           <el-select v-model="inventoryFormData.product_id" placeholder="请选择">
@@ -59,7 +59,36 @@
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
-          <el-button @click="modify()">修改</el-button>
+        </el-form-item>
+      </el-form>
+    </Dialog>
+    <Dialog ref="inventory" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
+      <el-form ref="inventoryFrom" :model="inventoryFormData" :rules="inventoryRules" label-width="100px">
+        <el-form-item label="产品型号选择" prop="product_id">
+          <el-select v-model="inventoryFormData.product_id" placeholder="请选择">
+            <el-option
+              v-for="item in productList"
+              :key="item.product.product_name"
+              :label="item.product.product_name"
+              :value="item.product.product_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="仓库" prop="product_id">
+          <el-select v-model="inventoryFormData.warehouse_id" placeholder="请选择">
+            <el-option
+              v-for="item in warehouseList"
+              :key="item.warehouseInfo.warehouse_name"
+              :label="item.warehouseInfo.warehouse_name"
+              :value="item.warehouseInfo.warehouse_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="库存数量" prop="product_name">
+          <el-input-number v-model="inventoryFormData.quantity" />
+        </el-form-item>
+        <el-form-item label="操作">
+          <el-button size="big" @click="modify()">修改</el-button>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -163,23 +192,27 @@ export default {
       this.fetchData()
     },
     // 启动弹窗
-    controller(inventoryFormData) {
-      this.InventoryDataRef(inventoryFormData)
+    openEditWindows(data) {
+      if (data != null) {
+        this.inventoryFormData = data
+      }
       getAllProduct().then(response => {
         this.productList = response.data
       })
       getWareHouse().then(response => {
         this.warehouseList = response.data
       })
-      this.$refs.inventory.open(
-        cancel => {
-          // cancel();
-          console.log('点击提交按钮了')
-        })
-        .then(() => {
-          console.log(this.$refs.span)
-        }
-        )
+      this.$refs.inventory.open()
+    },
+    openInventoryAddWindows() {
+      this.inventoryFormData = {}
+      getAllProduct().then(response => {
+        this.productList = response.data
+      })
+      getWareHouse().then(response => {
+        this.warehouseList = response.data
+      })
+      this.$refs.inventoryAddWindows.open()
     },
     beforeClose() {
       console.log('关闭前')
@@ -192,7 +225,7 @@ export default {
         if (valid) {
           addInventory(this.inventoryFormData).then(response => {
             // 关闭弹窗
-            this.$refs.inventory.cancel()
+            this.$refs.inventoryAddWindows.cancel()
             if (response.code === 20011) {
               this.$message.success('添加成功')
             } else {
@@ -239,11 +272,6 @@ export default {
         // 获取数据
         this.fetchData()
       })
-    },
-    InventoryDataRef(inventoryForm) {
-      if (inventoryForm != null) {
-        this.inventoryFormData = inventoryForm
-      }
     }
     // 结尾
   }
