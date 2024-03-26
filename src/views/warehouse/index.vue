@@ -1,46 +1,63 @@
 <template>
-  <div class="repository-main">
+  <div class="inventory-main">
     <el-button @click="controller()">添加</el-button>
-    <!-- slot-scope="scope " 来 取得 作用域插槽 :data绑定的数据 -->
-    <el-table v-loading="listLoading" :data="warehouseList" border style="width: 100%">
-
-      <el-table-column fixed label="ID" type="index" />
-      <el-table-column fixed label="仓库地址" prop="warehouse_code" />
-      <el-table-column fixed label="仓库面积" prop="warehouse_name" />
-      <el-table-column fixed label="仓库等级" prop="address" />
-      <el-table-column fixed label="仓库简介" prop="contact" />
-
-      <!-- 操作 -->
-      <el-table-column fixed="left" label="操作" width="150">
-        <template slot-scope="scope">
-          <!-- 修改 -->
-          <el-button size="small" type="text" @click="controller(scope.row)">编辑</el-button>
-          <!-- 删除 -->
-          <el-button size="small" type="text" @click="deleteRepository(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <Dialog ref="repository" :before-close="beforeClose" :config="config" v-bind="warehouseList" @close="resetForm">
-      <el-form ref="repositoryFrom" :model="repositoryFormData" :rules="repositoryRules" label-width="100px">
-        <el-form-item label="仓库地址" prop="warehouse_code">
-          <el-input v-model="repositoryFormData.warehouse_code" />
+    <div>
+      <el-table v-loading="loading" :data="currentPageData" border size="mini">
+        <el-table-column align="center" label="序号" type="index" width="70px" show-overflow-tooltip />
+        <el-table-column
+          v-for="column in columns"
+          :key="column.prop"
+          :prop="column.prop"
+          :label="column.label"
+          align="center"
+          show-overflow-tooltip
+        />
+        <el-table-column fixed="right" label="操作" width="150">
+          <template slot-scope="scope">
+            <!-- 修改 -->
+            <el-button size="small" type="text" @click="controller(scope.row.inventory)">编辑</el-button>
+            <!-- 删除 -->
+            <el-button size="small" type="text" @click="deleteInventory(scope.row.inventory.inventory_id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align:center">
+        <el-pagination
+          hide-on-single-page
+          background
+          layout="prev, pager, next,total"
+          :total="total"
+          :page-size="pagesize"
+          @current-change="currentChange"
+        />
+      </div>
+    </div>
+    <Dialog ref="inventory" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
+      <el-form ref="inventoryFrom" :model="inventoryFormData" :rules="inventoryRules" label-width="100px">
+        <el-form-item label="物料名称" prop="inventory_name">
+          <el-input v-model="inventoryFormData.inventory_name" />
         </el-form-item>
-        <el-form-item label="仓库面积" prop="warehouse_name">
-          <el-input v-model="repositoryFormData.warehouse_name" />
+        <el-form-item label="物料描述" prop="description">
+          <el-input v-model="inventoryFormData.description" />
         </el-form-item>
-        <el-form-item label="仓库等级" prop="address">
-          <el-input v-model="repositoryFormData.address" />
+        <el-form-item label="物料价格" prop="price">
+          <el-input v-model="inventoryFormData.price" />
         </el-form-item>
-        <el-form-item label="仓库简介" prop="contact">
-          <el-input v-model="repositoryFormData.contact" />
+        <el-form-item label="供应商名称" prop="supplier_id">
+          <el-select v-model="inventoryFormData.supplier_id" placeholder="请选择">
+            <el-option
+              v-for="item in supplierList"
+              :key="item.supplier_name"
+              :label="item.supplier_name"
+              :value="item.supplier_id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
           <el-button @click="modify()">修改</el-button>
         </el-form-item>
       </el-form>
-
     </Dialog>
   </div>
 
@@ -48,7 +65,8 @@
 
 <script>
 
-import { addRepository, deleteRepository, getWareHouse, modifyRepository } from '@/api/warehouse'
+import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/inventory'
+import { getSupplier } from '@/api/supplier'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -67,14 +85,9 @@ export default {
   },
   data() {
     return {
-      // 所有仓库
-      warehouseList: [{
-        id: 1,
-        warehouse_code: '001',
-        warehouse_name: 999,
-        address: 1,
-        contact: '广州城市理工学院'
-      }],
+      supplierList: [],
+      // 所有物料
+      inventoryList: [],
       // 信息加载开关
       listLoading: true,
       config: {
@@ -84,81 +97,100 @@ export default {
         center: true,
         btnTxt: ['取消', '提交']
       },
-      repositoryFormData: {
-        id: 1,
-        warehouse_code: '001',
-        warehouse_name: 999,
-        address: '广州市花都区学府1号',
-        contact: '联系方式'
+      inventoryFormData: {
+        inventory_id: null,
+        inventory_name: '物料名称',
+        description: '规格描述',
+        price: 0,
+        supplier_id: 1,
+        is_deleted: 0,
+        is_available: 0
       },
-
       // 用户表单
       // 表单规则
-      repositoryRules: {
-        warehouse_code: [
-          { required: true, message: '请输入仓库编码', trigger: 'blur' }
-        ],
-        warehouse_name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
-        ],
-        address: [
-          { required: true, message: '请输入地址', trigger: 'blur' }
-        ],
-        contact: [
-          { required: true, message: '请输入联系方式', trigger: 'blur' }
-        ]
-      }
+      inventoryRules: { },
+      loading: false,
+      total: 100, // 总条目数，需要根据实际情况设置
+      pagesize: 10, // 每页显示的条目数1
+      currentPage: 1, // 当前页码
+      columns: [
+
+        { prop: 'inventory.product.product_name', label: '产品名称' },
+        { prop: 'inventory.product.description', label: '产品描述' },
+        { prop: 'inventory.product.price', label: '价格' },
+        { prop: 'inventory.product.cost', label: '成本' },
+        { prop: 'inventory.quantity', label: '数量' },
+        { prop: 'inventory.warehouseInfo.warehouse_name', label: '仓库名称' },
+        { prop: 'inventory.warehouseInfo.address', label: '仓库地址' }
+        // 其他列配置
+      ]
+
       // 尾
+    }
+  },
+  computed: {
+    currentPageData() {
+      // 根据当前页码和每页显示的条目数截取数据
+      const startIndex = (this.currentPage - 1) * this.pagesize
+      const endIndex = this.currentPage * this.pagesize
+      return this.inventoryList.slice(startIndex, endIndex)
     }
   },
   created() {
     // 执行获取数据函数
-
     this.fetchData()
   },
   methods: {
     handleClick(row) {
-
+      console.log(row)
     },
     fetchData() {
       this.listLoading = true
-      getWareHouse().then(response => {
-        this.warehouseList = response.data
-
+      getAllInventory().then(response => {
+        this.inventoryList = response.data
         this.listLoading = false
       })
     },
+
+    currentChange(currentPage) {
+      // 处理分页变化事件
+      this.currentPage = currentPage
+      // 从后端获取当前页数据
+      this.fetchData()
+    },
     // 启动弹窗
-    controller(repositoryFormData) {
-      this.RepositoryDataRef(repositoryFormData)
-      this.$refs.repository.open(
+    controller(inventoryFormData) {
+      this.InventoryDataRef(inventoryFormData)
+      getSupplier().then(response => {
+        this.supplierList = response.data
+      })
+      this.$refs.inventory.open(
         cancel => {
           // cancel();
-
+          console.log('点击提交按钮了')
         })
         .then(() => {
-
+          console.log(this.$refs.span)
         }
         )
     },
     beforeClose() {
-
+      console.log('关闭前')
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
     add() {
-      this.$refs.repositoryFrom.validate((valid) => {
+      this.$refs.inventoryFrom.validate((valid) => {
         if (valid) {
-          addRepository(this.repositoryFormData).then(response => {
+          addInventory(this.inventoryFormData).then(response => {
             // 关闭弹窗
-            this.$refs.repository.cancel()
-            if (response.data.result === 20011) {
+            this.$refs.inventory.cancel()
+            if (response.code === 20011) {
               this.$message.success('添加成功')
             } else {
-              this.$message.error(response.data.msg)
+              this.$message.error(response.msg)
             }
-
             // 获取数据
             this.fetchData()
           })
@@ -169,13 +201,13 @@ export default {
       })
     },
     modify() {
-      this.$refs.repositoryFrom.validate((valid) => {
+      this.$refs.inventoryFrom.validate((valid) => {
         if (valid) {
-          modifyRepository(this.repositoryFormData).then(response => {
+          modifyInventory(this.inventoryFormData).then(response => {
             // 关闭弹窗
-            this.$refs.repository.cancel()
+            this.$refs.inventory.cancel()
 
-            if (response.data.result === 20031) {
+            if (response.code === 20031) {
               this.$message.success('修改成功')
             } else {
               this.$message.error('修改失败')
@@ -190,20 +222,20 @@ export default {
       })
     },
     // 发送删除请求
-    deleteRepository(id) {
-      deleteRepository(id).then(response => {
-        if (response.data.result === 20021) {
+    deleteInventory(id) {
+      deleteInventory(id).then(response => {
+        if (response.code === 20021) {
           this.$message.success('删除成功')
         } else {
-          this.$message.error(response.data.msg)
+          this.$message.error(response.msg)
         }
         // 获取数据
         this.fetchData()
       })
     },
-    RepositoryDataRef(repositoryForm) {
-      if (repositoryForm != null) {
-        this.repositoryFormData = repositoryForm
+    InventoryDataRef(inventoryForm) {
+      if (inventoryForm != null) {
+        this.inventoryFormData = inventoryForm
       }
     }
     // 结尾
