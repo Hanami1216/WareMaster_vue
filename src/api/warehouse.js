@@ -44,8 +44,9 @@ export function modifyRepository(data) {
  */
 export function deleteRepository(id) {
   return request({
-    url: '/warehouse/info' + id,
-    method: 'delete'
+    url: '/warehouse/info',
+    method: 'delete',
+    params: { id: id }
   })
 }
 

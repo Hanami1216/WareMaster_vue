@@ -48,9 +48,9 @@
           <el-select v-model="inventoryFormData.warehouse_id" placeholder="请选择">
             <el-option
               v-for="item in warehouseList"
-              :key="item.product_name"
-              :label="item.product_name"
-              :value="item.product_id"
+              :key="item.warehouseInfo.warehouse_name"
+              :label="item.warehouseInfo.warehouse_name"
+              :value="item.warehouseInfo.warehouse_id"
             />
           </el-select>
         </el-form-item>
@@ -71,6 +71,7 @@
 
 import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/inventory'
 import { getAllProduct } from '@/api/product'
+import { getWareHouse } from '@/api/warehouse'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -167,7 +168,9 @@ export default {
       getAllProduct().then(response => {
         this.productList = response.data
       })
-
+      getWareHouse().then(response => {
+        this.warehouseList = response.data
+      })
       this.$refs.inventory.open(
         cancel => {
           // cancel();
