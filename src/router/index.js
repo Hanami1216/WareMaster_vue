@@ -74,23 +74,23 @@ export const constantRoutes = [
       {
         path: 'receive',
         name: 'Receive',
-        component: () => import('@/views/receive/index'),
+        component: () => import('@/views/customerOrder/index'),
         meta: { title: '入货单', icon: 'table' }
       }, {
         path: 'deliver',
         name: 'Deliver',
-        component: () => import('@/views/deliver/index.vue'),
+        component: () => import('@/views/customerOrder/index.vue'),
         meta: { title: '出货单', icon: 'table' }
       }, {
         path: 'SupplierInvoices',
         name: 'supplierInvoices',
-        component: () => import('@/views/receive/index'),
-        meta: { title: '应付账单', icon: 'table' }
+        component: () => import('@/views/customerOrder/index'),
+        meta: { title: '采购单', icon: 'table' }
       }, {
         path: 'CustomerInvoices',
         name: 'customer Invoices',
-        component: () => import('@/views/deliver/index.vue'),
-        meta: { title: '应收账单', icon: 'table' }
+        component: () => import('@/views/customerOrder/index.vue'),
+        meta: { title: '客户订单', icon: 'table' }
       }
     ]
   },
