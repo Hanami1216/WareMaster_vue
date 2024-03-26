@@ -34,24 +34,28 @@
     </div>
     <Dialog ref="inventory" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
       <el-form ref="inventoryFrom" :model="inventoryFormData" :rules="inventoryRules" label-width="100px">
-        <el-form-item label="物料名称" prop="inventory_name">
-          <el-input v-model="inventoryFormData.inventory_name" />
-        </el-form-item>
-        <el-form-item label="物料描述" prop="description">
-          <el-input v-model="inventoryFormData.description" />
-        </el-form-item>
-        <el-form-item label="物料价格" prop="price">
-          <el-input v-model="inventoryFormData.price" />
-        </el-form-item>
-        <el-form-item label="供应商名称" prop="supplier_id">
-          <el-select v-model="inventoryFormData.supplier_id" placeholder="请选择">
+        <el-form-item label="产品型号选择" prop="product_id">
+          <el-select v-model="inventoryFormData.product_id" placeholder="请选择">
             <el-option
-              v-for="item in supplierList"
-              :key="item.supplier_name"
-              :label="item.supplier_name"
-              :value="item.supplier_id"
+              v-for="item in productList"
+              :key="item.product.product_name"
+              :label="item.product.product_name"
+              :value="item.product.product_id"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item label="仓库" prop="product_id">
+          <el-select v-model="inventoryFormData.warehouse_id" placeholder="请选择">
+            <el-option
+              v-for="item in warehouseList"
+              :key="item.product_name"
+              :label="item.product_name"
+              :value="item.product_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="库存数量" prop="product_name">
+          <el-input-number v-model="inventoryFormData.quantity" />
         </el-form-item>
         <el-form-item label="操作">
           <el-button @click="add()">添加</el-button>
@@ -66,7 +70,7 @@
 <script>
 
 import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/inventory'
-import { getSupplier } from '@/api/supplier'
+import { getAllProduct } from '@/api/product'
 import Dialog from '@/components/dialog.vue'
 
 export default {
@@ -85,8 +89,7 @@ export default {
   },
   data() {
     return {
-      supplierList: [],
-      // 所有物料
+      // 所有库存
       inventoryList: [],
       // 信息加载开关
       listLoading: true,
@@ -98,14 +101,14 @@ export default {
         btnTxt: ['取消', '提交']
       },
       inventoryFormData: {
-        inventory_id: null,
-        inventory_name: '物料名称',
-        description: '规格描述',
-        price: 0,
-        supplier_id: 1,
-        is_deleted: 0,
-        is_available: 0
+        inventory_id: 2,
+        warehouse_id: 1,
+        product_id: 8,
+        quantity: 123,
+        is_delete: 0
       },
+      productList: [],
+      warehouseList: [],
       // 用户表单
       // 表单规则
       inventoryRules: { },
@@ -119,7 +122,7 @@ export default {
         { prop: 'inventory.product.description', label: '产品描述' },
         { prop: 'inventory.product.price', label: '价格' },
         { prop: 'inventory.product.cost', label: '成本' },
-        { prop: 'inventory.quantity', label: '数量' },
+        { prop: 'inventory.quantity', label: '库存数量' },
         { prop: 'inventory.warehouseInfo.warehouse_name', label: '仓库名称' },
         { prop: 'inventory.warehouseInfo.address', label: '仓库地址' }
         // 其他列配置
@@ -161,9 +164,10 @@ export default {
     // 启动弹窗
     controller(inventoryFormData) {
       this.InventoryDataRef(inventoryFormData)
-      getSupplier().then(response => {
-        this.supplierList = response.data
+      getAllProduct().then(response => {
+        this.productList = response.data
       })
+
       this.$refs.inventory.open(
         cancel => {
           // cancel();
