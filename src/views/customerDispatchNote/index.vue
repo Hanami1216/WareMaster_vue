@@ -17,7 +17,7 @@
             <!-- 修改 -->
             <el-button size="small" type="text" @click="openEditWindows(scope.row.CustomerDispatchNote)">编辑</el-button>
             <!-- 删除 -->
-            <el-button size="small" type="text" @click="deleteCustomerDispatchNote(scope.row.CustomerDispatchNote.order_id)">删除</el-button>
+            <el-button size="small" type="text" @click="deleteCustomerDispatchNote(scope.row.CustomerDispatchNote.note_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -34,8 +34,7 @@
     </div>
     <Dialog ref="customerDispatchNoteAddWindows" :before-close="beforeClose" :config="config" v-bind="customerDispatchNoteList" @close="resetForm">
       <el-form ref="customerDispatchNoteFrom" :model="customerDispatchNoteFormData" :rules="customerDispatchNoteRules" label-width="100px">
-
-        <el-form-item label="客户" prop="product_id">
+        <el-form-item label="客户">
           <el-select v-model="customerDispatchNoteFormData.customer_id" placeholder="请选择">
             <el-option
               v-for="item in customerList"
@@ -45,7 +44,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="产品型号选择" prop="product_id">
+        <el-form-item label="产品型号选择">
           <el-select v-model="customerDispatchNoteFormData.product_id" placeholder="请选择">
             <el-option
               v-for="item in productList"
@@ -55,10 +54,30 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="下单数量" prop="quantity">
+        <el-form-item label="仓库选择">
+          <el-select v-model="customerDispatchNoteFormData.warehouse_id" placeholder="请选择">
+            <el-option
+              v-for="item in warehouseList"
+              :key="item.warehouseInfo.warehouse_name"
+              :label="item.warehouseInfo.warehouse_name"
+              :value="item.warehouseInfo.warehouse_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="送货单经手人">
+          <el-select v-model="customerDispatchNoteFormData.user_id" placeholder="请选择">
+            <el-option
+              v-for="item in userList"
+              :key="item.user_name"
+              :label="item.user_name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="送货数量" prop="quantity">
           <el-input-number v-model="customerDispatchNoteFormData.quantity" />
         </el-form-item>
-        <el-form-item label="下单时间" prop="product_name">
+        <el-form-item label="送货时间" prop="product_name">
           <el-date-picker
             v-model="customerDispatchNoteFormData.dispatch_date"
             type="date"
@@ -71,9 +90,9 @@
         </el-form-item>
       </el-form>
     </Dialog>
-    <Dialog ref="customerDispatchNote" :before-close="beforeClose" :config="config" v-bind="customerDispatchNoteList" @close="resetForm">
+    <Dialog ref="customerDispatchNoteEditWidows" :before-close="beforeClose" :config="config" v-bind="customerDispatchNoteList" @close="resetForm">
       <el-form ref="customerDispatchNoteFrom" :model="customerDispatchNoteFormData" :rules="customerDispatchNoteRules" label-width="100px">
-        <el-form-item label="客户" prop="product_id">
+        <el-form-item label="客户">
           <el-select v-model="customerDispatchNoteFormData.customer_id" placeholder="请选择">
             <el-option
               v-for="item in customerList"
@@ -83,7 +102,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="产品型号选择" prop="product_id">
+        <el-form-item label="产品型号选择">
           <el-select v-model="customerDispatchNoteFormData.product_id" placeholder="请选择">
             <el-option
               v-for="item in productList"
@@ -93,10 +112,30 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="下单数量" prop="quantity">
+        <el-form-item label="仓库选择">
+          <el-select v-model="customerDispatchNoteFormData.warehouse_id" placeholder="请选择">
+            <el-option
+              v-for="item in warehouseList"
+              :key="item.warehouseInfo.warehouse_name"
+              :label="item.warehouseInfo.warehouse_name"
+              :value="item.warehouseInfo.warehouse_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="送货单经手人">
+          <el-select v-model="customerDispatchNoteFormData.user_id" placeholder="请选择">
+            <el-option
+              v-for="item in userList"
+              :key="item.user_name"
+              :label="item.user_name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="送货数量" prop="quantity">
           <el-input-number v-model="customerDispatchNoteFormData.quantity" />
         </el-form-item>
-        <el-form-item label="下单时间" prop="product_name">
+        <el-form-item label="送货时间" prop="product_name">
           <el-date-picker
             v-model="customerDispatchNoteFormData.dispatch_date"
             type="date"
@@ -105,7 +144,7 @@
         </el-form-item>
 
         <el-form-item label="操作">
-          <el-button @click="add()">添加</el-button>
+          <el-button size="big" style="margin: auto;" @click="modify()">修改</el-button>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -119,6 +158,8 @@ import { addCustomerDispatchNote, deleteCustomerDispatchNote, getAllCustomerDisp
 import { getAllProduct } from '@/api/product'
 import { getCustomer } from '@/api/customer'
 import Dialog from '@/components/dialog.vue'
+import { getWareHouse } from '@/api/warehouse'
+import { getUser } from '@/api/user'
 
 export default {
   components: {
@@ -148,16 +189,20 @@ export default {
         btnTxt: ['取消', '提交']
       },
       customerDispatchNoteFormData: {
-        order_id: 2,
+        note_id: 18,
         customer_id: 1,
-        product_id: 8,
-        quantity: 123,
-        dispatch_date: '2000-12-08',
-        order_date: '2006-04-06 13:43:23'
+        product_id: 1,
+        warehouse_id: 1,
+        quantity: 49,
+        out_time: '2002-11-13 17:26:37',
+        user_id: 1,
+        remark: null
         // is_delete: null
       },
       productList: [],
       customerList: [],
+      warehouseList: [],
+      userList: [],
       // 用户表单
       // 表单规则
       customerDispatchNoteRules: { },
@@ -233,7 +278,13 @@ export default {
       getCustomer().then(response => {
         this.customerList = response.data
       })
-      this.$refs.customerDispatchNote.open()
+      getWareHouse().then(response => {
+        this.warehouseList = response.data
+      })
+      getUser().then(response => {
+        this.userList = response.data
+      })
+      this.$refs.customerDispatchNoteEditWidows.open()
     },
     openCustomerDispatchNoteAddWindows() {
       this.customerDispatchNoteFormData = {}
@@ -242,6 +293,12 @@ export default {
       })
       getCustomer().then(response => {
         this.customerList = response.data
+      })
+      getWareHouse().then(response => {
+        this.warehouseList = response.data
+      })
+      getUser().then(response => {
+        this.userList = response.data
       })
       this.$refs.customerDispatchNoteAddWindows.open()
     },
@@ -276,7 +333,7 @@ export default {
         if (valid) {
           modifyCustomerDispatchNote(this.customerDispatchNoteFormData).then(response => {
             // 关闭弹窗
-            this.$refs.customerDispatchNote.cancel()
+            this.$refs.customerDispatchNoteEditWidows.cancel()
 
             if (response.code === 20031) {
               this.$message.success('修改成功')
