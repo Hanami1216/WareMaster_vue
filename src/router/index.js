@@ -84,7 +84,7 @@ export const constantRoutes = [
       }, {
         path: 'SupplierInvoices',
         name: 'supplierInvoices',
-        component: () => import('@/views/customerOrder/index'),
+        component: () => import('@/views/supplierOrder/index'),
         meta: { title: '采购单', icon: 'table' }
       }, {
         path: 'CustomerInvoices',
