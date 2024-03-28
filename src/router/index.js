@@ -79,7 +79,7 @@ export const constantRoutes = [
       }, {
         path: 'deliver',
         name: 'Deliver',
-        component: () => import('@/views/customerOrder/index.vue'),
+        component: () => import('@/views/customerDispatchNote/index.vue'),
         meta: { title: '出货单', icon: 'table' }
       }, {
         path: 'SupplierInvoices',
