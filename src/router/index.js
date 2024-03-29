@@ -67,14 +67,14 @@ export const constantRoutes = [
     // 用户
     path: '/control',
     component: Layout,
-    redirect: '/control/receive',
+    redirect: '/control/supplierDispatchNote',
     name: 'Control',
     meta: { title: '操作', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'receive',
-        name: 'Receive',
-        component: () => import('@/views/customerOrder/index'),
+        path: 'supplierDispatchNote',
+        name: 'supplierDispatchNote',
+        component: () => import('@/views/supplierDispatchNote/index'),
         meta: { title: '入货单', icon: 'table' }
       }, {
         path: 'deliver',
