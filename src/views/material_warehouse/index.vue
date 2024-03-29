@@ -34,17 +34,17 @@
     </div>
     <Dialog ref="inventoryAddWindows" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
       <el-form ref="inventoryFrom" :model="inventoryFormData" :rules="inventoryRules" label-width="100px">
-        <el-form-item label="产品型号选择" prop="product_id">
-          <el-select v-model="inventoryFormData.product_id" placeholder="请选择">
+        <el-form-item label="物料型号">
+          <el-select v-model="inventoryFormData.material_id" placeholder="请选择">
             <el-option
-              v-for="item in productList"
-              :key="item.product.product_name"
-              :label="item.product.product_name"
-              :value="item.product.product_id"
+              v-for="item in materialList"
+              :key="item.material.material_name"
+              :label="item.material.material_name"
+              :value="item.material.material_id"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="仓库" prop="product_id">
+        <el-form-item label="仓库">
           <el-select v-model="inventoryFormData.warehouse_id" placeholder="请选择">
             <el-option
               v-for="item in warehouseList"
@@ -54,7 +54,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="库存数量" prop="product_name">
+        <el-form-item label="库存数量" >
           <el-input-number v-model="inventoryFormData.quantity" />
         </el-form-item>
         <el-form-item label="操作">
@@ -64,17 +64,17 @@
     </Dialog>
     <Dialog ref="inventory" :before-close="beforeClose" :config="config" v-bind="inventoryList" @close="resetForm">
       <el-form ref="inventoryFrom" :model="inventoryFormData" :rules="inventoryRules" label-width="100px">
-        <el-form-item label="产品型号选择" prop="product_id">
-          <el-select v-model="inventoryFormData.product_id" placeholder="请选择">
+        <el-form-item label="物料型号">
+          <el-select v-model="inventoryFormData.material_id" placeholder="请选择">
             <el-option
-              v-for="item in productList"
-              :key="item.product.product_name"
-              :label="item.product.product_name"
-              :value="item.product.product_id"
+              v-for="item in materialList"
+              :key="item.material.material_name"
+              :label="item.material.material_name"
+              :value="item.material.material_id"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="仓库" prop="product_id">
+        <el-form-item label="仓库">
           <el-select v-model="inventoryFormData.warehouse_id" placeholder="请选择">
             <el-option
               v-for="item in warehouseList"
@@ -84,7 +84,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="库存数量" prop="product_name">
+        <el-form-item label="库存数量">
           <el-input-number v-model="inventoryFormData.quantity" />
         </el-form-item>
         <el-form-item label="操作">
@@ -98,8 +98,8 @@
 
 <script>
 
-import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/productInventory'
-import { getAllProduct } from '@/api/product'
+import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/materialInventory'
+import { getAllMaterial } from '@/api/material'
 import { getWareHouse } from '@/api/warehouse'
 import Dialog from '@/components/dialog.vue'
 
@@ -126,18 +126,18 @@ export default {
       config: {
         top: '10vh',
         width: '500px',
-        title: '温馨提示',
+        title: '物料库存管理',
         center: true,
         btnTxt: ['取消', '提交']
       },
       inventoryFormData: {
         inventory_id: 2,
         warehouse_id: 1,
-        product_id: 8,
+        material_id: 8,
         quantity: 123,
         is_delete: 0
       },
-      productList: [],
+      materialList: [],
       warehouseList: [],
       // 用户表单
       // 表单规则
@@ -148,10 +148,9 @@ export default {
       currentPage: 1, // 当前页码
       columns: [
 
-        { prop: 'inventory.product.product_name', label: '产品名称' },
-        { prop: 'inventory.product.description', label: '产品描述' },
-        { prop: 'inventory.product.price', label: '价格' },
-        { prop: 'inventory.product.cost', label: '成本' },
+        { prop: 'inventory.material.material_name', label: '物料名称' },
+        { prop: 'inventory.material.description', label: '物料描述' },
+        { prop: 'inventory.material.price', label: '价格' },
         { prop: 'inventory.quantity', label: '库存数量' },
         { prop: 'inventory.warehouseInfo.warehouse_name', label: '仓库名称' },
         { prop: 'inventory.warehouseInfo.address', label: '仓库地址' }
@@ -196,8 +195,8 @@ export default {
       if (data != null) {
         this.inventoryFormData = data
       }
-      getAllProduct().then(response => {
-        this.productList = response.data
+      getAllMaterial().then(response => {
+        this.materialList = response.data
       })
       getWareHouse().then(response => {
         this.warehouseList = response.data
@@ -206,8 +205,8 @@ export default {
     },
     openInventoryAddWindows() {
       this.inventoryFormData = {}
-      getAllProduct().then(response => {
-        this.productList = response.data
+      getAllMaterial().then(response => {
+        this.materialList = response.data
       })
       getWareHouse().then(response => {
         this.warehouseList = response.data
