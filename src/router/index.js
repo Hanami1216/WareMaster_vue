@@ -126,8 +126,8 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'warehouse',
-        component: () => import('@/views/warehouse/index'),
-        meta: { title: '库存管理', icon: 'form' }
+        component: () => import('@/views/product_warehouse/index'),
+        meta: { title: '产品库存管理', icon: 'form' }
       }
     ]
   }, {

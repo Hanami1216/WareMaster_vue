@@ -1,12 +1,13 @@
 import request from '@/utils/request'
 
+const API_BASE_URL = 'product_inventory'
 /**
  *获取物料信息
  * @returns data
  */
 export function getAllInventory(params) {
   return request({
-    url: '/inventory/info/all',
+    url: API_BASE_URL + '/info/all',
     method: 'get',
     params
   })
@@ -18,7 +19,7 @@ export function getAllInventory(params) {
  */
 export function addInventory(data) {
   return request({
-    url: '/inventory/info',
+    url: API_BASE_URL + '/info',
     method: 'post',
     data
   })
@@ -30,7 +31,7 @@ export function addInventory(data) {
  */
 export function modifyInventory(data) {
   return request({
-    url: '/inventory/info',
+    url: API_BASE_URL + '/info',
     method: 'put',
     data
   })
@@ -42,7 +43,7 @@ export function modifyInventory(data) {
  */
 export function deleteInventory(id) {
   return request({
-    url: '/inventory/info',
+    url: API_BASE_URL + '/info',
     method: 'delete',
     params: { id: id }
   })

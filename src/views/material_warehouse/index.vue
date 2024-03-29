@@ -98,7 +98,7 @@
 
 <script>
 
-import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/inventory'
+import { addInventory, deleteInventory, getAllInventory, modifyInventory } from '@/api/productInventory'
 import { getAllProduct } from '@/api/product'
 import { getWareHouse } from '@/api/warehouse'
 import Dialog from '@/components/dialog.vue'
