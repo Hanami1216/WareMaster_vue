@@ -1,6 +1,6 @@
 <template>
   <div :class="{'has-logo':showLogo}">
-    <logo v-if="showLogo" :collapse="isCollapse"/>
+    <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :active-text-color="variables.menuActiveText"
@@ -12,7 +12,7 @@
         :unique-opened="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in routes" :key="route.path" :base-path="route.path" :item="route"/>
+        <sidebar-item v-for="route in routes" :key="route.path" :base-path="route.path" :item="route" />
       </el-menu>
     </el-scrollbar>
   </div>
