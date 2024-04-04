@@ -67,24 +67,24 @@ export const constantRoutes = [
     // 用户
     path: '/control',
     component: Layout,
-    redirect: '/control/receive',
+    redirect: '/control/supplierDispatchNote',
     name: 'Control',
     meta: { title: '操作', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'receive',
-        name: 'Receive',
-        component: () => import('@/views/customerOrder/index'),
+        path: 'supplierDispatchNote',
+        name: 'supplierDispatchNote',
+        component: () => import('@/views/supplierDispatchNote/index'),
         meta: { title: '入货单', icon: 'table' }
       }, {
         path: 'deliver',
         name: 'Deliver',
-        component: () => import('@/views/customerOrder/index.vue'),
+        component: () => import('@/views/customerDispatchNote/index.vue'),
         meta: { title: '出货单', icon: 'table' }
       }, {
         path: 'SupplierInvoices',
         name: 'supplierInvoices',
-        component: () => import('@/views/customerOrder/index'),
+        component: () => import('@/views/supplierOrder/index'),
         meta: { title: '采购单', icon: 'table' }
       }, {
         path: 'CustomerInvoices',
@@ -120,17 +120,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/warehouse',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'warehouse',
-        component: () => import('@/views/warehouse/index'),
-        meta: { title: '库存管理', icon: 'form' }
-      }
-    ]
-  }, {
     path: '/material',
     component: Layout,
     children: [
@@ -142,6 +131,17 @@ export const constantRoutes = [
       }
     ]
   }, {
+    path: '/material_warehouse',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'material_warehouse',
+        component: () => import('@/views/material_warehouse/index'),
+        meta: { title: '物料库存管理', icon: 'form' }
+      }
+    ]
+  }, {
     path: '/product',
     component: Layout,
     children: [
@@ -150,6 +150,18 @@ export const constantRoutes = [
         name: 'product',
         component: () => import('@/views/product/index'),
         meta: { title: '产品信息', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/product_warehouse',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'product_warehouse',
+        component: () => import('@/views/product_warehouse/index'),
+        meta: { title: '产品库存管理', icon: 'form' }
       }
     ]
   }, {
